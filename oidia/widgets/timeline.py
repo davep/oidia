@@ -57,7 +57,7 @@ class Timeline( Horizontal ):
         """Initialise the timeline display.
 
         Args:
-            day_type (Type[ TimelineDay ] ): The type of widget to use to show a day.
+            day_type (Type[ TimelineDay ]): The type of widget to use to show a day.
         """
         super().__init__( **kwargs )
         self._day_type = day_type
