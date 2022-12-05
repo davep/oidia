@@ -67,15 +67,6 @@ class Timeline( Horizontal ):
     end_date = reactive( date.today() )
     """date: The last date shown in the timeline."""
 
-    def __init__( self, day_type: Type[ TimelineDay ]=TimelineDay, **kwargs: Any ) -> None:
-        """Initialise the timeline display.
-
-        Args:
-            day_type (Type[ TimelineDay ]): The type of widget to use to show a day.
-        """
-        super().__init__( **kwargs )
-        self._day_type = day_type
-
     @property
     def start_date( self ) -> date:
         """date: The first date shown in the timeline."""
@@ -86,6 +77,17 @@ class Timeline( Horizontal ):
         """list[ date ]: The list of dates currently in the window of interest."""
         return [ self.start_date + timedelta( days=day ) for day in range( 1, self.time_span.days + 1 ) ]
 
+    def make_my_day( self, day: date ) -> TimelineDay:
+        """Make a day widget for the given day.
+
+        Args:
+            day (date): The date to make the day widget for.
+
+        Returns:
+            TimelineDay: The day widget for the timeline.
+        """
+        return TimelineDay( day )
+
     def compose( self ) -> ComposeResult:
         """Compose the widget.
 
@@ -94,7 +96,7 @@ class Timeline( Horizontal ):
         """
         yield TimelineTitle( self.title )
         for day in self.dates:
-            yield self._day_type( day )
+            yield self.make_my_day( day )
 
     def watch_time_span( self, new_span: timedelta ) -> None:
         """React to changes to the time span of the timeline.
@@ -104,7 +106,7 @@ class Timeline( Horizontal ):
         """
         self.query( TimelineDay ).remove()
         self.mount( *[
-            self._day_type( self.end_date - timedelta( days=day ) )
+            self.make_my_day( self.end_date - timedelta( days=day ) )
             for day in reversed( range( new_span.days ) )
         ] )
 
