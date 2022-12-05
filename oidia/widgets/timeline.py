@@ -47,7 +47,7 @@ class TimelineDay( Static ):
 class Timeline( Horizontal ):
     """Widget to display a horizontal timeline."""
 
-    time_span = timedelta( weeks=1 )
+    time_span = reactive( timedelta( weeks=1 ), init=False )
     """timedelta: The span of time the timeline will show in one go."""
 
     end_date = reactive( date.today() )
@@ -81,6 +81,18 @@ class Timeline( Horizontal ):
         for day in self.dates:
             yield self._day_type( day )
 
+    def watch_time_span( self, new_span: timedelta ) -> None:
+        """React to changes to the time span of the timeline.
+
+        Args:
+            new_span (timedelta): The new timespan for the timeline.
+        """
+        self.query( TimelineDay ).remove()
+        self.mount( *[
+            self._day_type( self.end_date - timedelta( days=day ) )
+            for day in reversed( range( new_span.days ) )
+        ] )
+
     def watch_end_date( self, old_date: date, new_date: date ) -> None:
         """React to changes to the end date for the display.
 
@@ -99,5 +111,18 @@ class Timeline( Horizontal ):
             days (int): The number of days to move by.
         """
         self.end_date += timedelta( days=days )
+
+    def zoom_days( self, days: int ) -> None:
+        """Zoom the timeline in/out by a given number of days.
+
+        Args:
+            days (int): The number of days to zoom by.
+
+        Note:
+            A negative number of days zooms out.
+        """
+        # Ensure the zoom only ever results in a single day at most.
+        if self.time_span.days > 1 or days > 0:
+            self.time_span += timedelta( days=days )
 
 ### timeline.py ends here
