@@ -7,7 +7,7 @@ from datetime import date, timedelta
 ##############################################################################
 # Textual imports.
 from textual.app        import ComposeResult, RenderResult
-from textual.containers import Horizontal
+from textual.containers import Horizontal, Grid
 from textual.reactive   import reactive
 from textual.widgets    import Static, Label
 
@@ -17,7 +17,8 @@ class TimelineDay( Static ):
 
     DEFAULT_CSS = """
     TimelineDay {
-        width: 1fr;
+        width: 100%;
+        height: auto;
         text-align: center;
     }
     """
@@ -52,6 +53,27 @@ class TimelineTitle( Label ):
         width: 25;
     }
     """
+    """str: The default styling for a `TimelineTitle`."""
+
+##############################################################################
+class TimelineDays( Grid ):
+    """Widget that shows the actual days on the timeline."""
+
+    DEFAULT_CSS = """
+    TimelineDays {
+        width: 1fr;
+        grid-size: 1;
+    }
+    """
+    """str: The default styling for a `TimelineDays`."""
+
+    def spanning( self, span: timedelta ) -> None:
+        """Set the span for the days display.
+
+        Args:
+            span (timedelta): The span.
+        """
+        self.styles.grid_size_columns = span.days
 
 ##############################################################################
 class Timeline( Horizontal ):
@@ -94,8 +116,13 @@ class Timeline( Horizontal ):
             ComposeResult: The result of composing the widget.
         """
         yield TimelineTitle( self.title )
-        for day in self.dates:
-            yield self.make_my_day( day )
+        yield TimelineDays( *[
+            self.make_my_day( day ) for day in self.dates
+        ] )
+
+    def on_mount( self ):
+        """Set up the display after it has been mounted."""
+        self.query_one( TimelineDays ).spanning( self.time_span )
 
     def watch_time_span( self, new_span: timedelta ) -> None:
         """React to changes to the time span of the timeline.
@@ -104,10 +131,11 @@ class Timeline( Horizontal ):
             new_span (timedelta): The new timespan for the timeline.
         """
         self.query( TimelineDay ).remove()
-        self.mount( *[
+        self.query_one( TimelineDays ).mount( *[
             self.make_my_day( self.end_date - timedelta( days=day ) )
             for day in reversed( range( new_span.days ) )
         ] )
+        self.query_one( TimelineDays ).spanning( self.time_span )
 
     def watch_end_date( self, old_date: date, new_date: date ) -> None:
         """React to changes to the end date for the display.
