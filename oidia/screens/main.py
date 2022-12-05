@@ -6,6 +6,7 @@ from textual.app        import ComposeResult
 from textual.screen     import Screen
 from textual.widgets    import Header, Footer
 from textual.containers import Vertical
+from textual.binding    import Binding
 
 ##############################################################################
 # Local imports.
@@ -32,12 +33,13 @@ class Main( Screen ):
     """str: The styles for the main screen."""
 
     BINDINGS = [
-        ( "left",  "move(-1)", "-1 day" ),
-        ( "right", "move(1)",  "+1 day" ),
-        ( "up",    "zoom(-1)", "In" ),
-        ( "down",  "zoom(1)",  "Out" ),
-        ( "a",     "add", "Add Streak")
+        Binding( "left",                 "move(-1)", "< day" ),
+        Binding( "right",                "move(1)",  "> day" ),
+        Binding( "left_square_bracket",  "zoom(-1)", "Zoom In" ),
+        Binding( "right_square_bracket", "zoom(1)",  "Zoom Out" ),
+        Binding( "a",                    "add",      "Add Streak")
     ]
+    """list[ Binding ]: The bindings for the main screen."""
 
     def compose( self ) -> ComposeResult:
         """Compose the content of the main screen.
