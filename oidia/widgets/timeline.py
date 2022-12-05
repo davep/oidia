@@ -19,7 +19,7 @@ class TimelineDay( Static ):
     DEFAULT_CSS = """
     TimelineDay {
         width: 100%;
-        height: auto;
+        height: 100%;
         text-align: center;
     }
     """
@@ -52,6 +52,7 @@ class TimelineTitle( Label ):
     DEFAULT_CSS = """
     TimelineTitle {
         width: 25;
+        height: 100%;
     }
     """
     """str: The default styling for a `TimelineTitle`."""

@@ -2,13 +2,16 @@
 
 ##############################################################################
 # Local imports.
-from .timeline import TimelineDay, Timeline
+from .timeline   import TimelineDay, Timeline
+from .streakline import StreakDay, StreakLine
 
 ##############################################################################
 # Exports.
 __all__ = [
     "TimelineDay",
-    "Timeline"
+    "Timeline",
+    "StreakDay",
+    "StreakLine"
 ]
 
 ### __init__.py ends here
