@@ -2,6 +2,7 @@
 
 ##############################################################################
 # Python imports.
+from typing   import Any
 from datetime import date, timedelta
 
 ##############################################################################
@@ -67,6 +68,15 @@ class TimelineDays( Grid ):
     """
     """str: The default styling for a `TimelineDays`."""
 
+    def __init__( self, span: timedelta, *args: Any, **kwargs: Any ) -> None:
+        """initialise the days widget.
+
+        Args:
+            span (timedelta): The span of time to cover.
+        """
+        super().__init__( *args, **kwargs )
+        self.spanning( span )
+
     def spanning( self, span: timedelta ) -> None:
         """Set the span for the days display.
 
@@ -116,7 +126,7 @@ class Timeline( Horizontal ):
             ComposeResult: The result of composing the widget.
         """
         yield TimelineTitle( self.title )
-        yield TimelineDays( *[
+        yield TimelineDays( self.time_span, *[
             self.make_my_day( day ) for day in self.dates
         ] )
 
