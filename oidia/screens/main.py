@@ -15,6 +15,11 @@ class Main( Screen ):
     """The main screen of the application."""
 
     DEFAULT_CSS = """
+    TimelineTitle {
+        background: $primary-background;
+        border-right: vkey $secondary;
+    }
+
     #header TimelineDay {
         background: $primary-background;
         border-right: vkey $secondary;
