@@ -10,7 +10,7 @@ from datetime import date, timedelta
 from textual.app        import ComposeResult, RenderResult
 from textual.containers import Horizontal
 from textual.reactive   import reactive
-from textual.widgets    import Static
+from textual.widgets    import Static, Label
 
 ##############################################################################
 class TimelineDay( Static ):
@@ -45,8 +45,21 @@ class TimelineDay( Static ):
         return self.day.strftime( "%b %d\n%a" )
 
 ##############################################################################
+class TimelineTitle( Label ):
+    """A widget that displays the title of a timeline."""
+
+    DEFAULT_CSS = """
+    TimelineTitle {
+        width: 25;
+    }
+    """
+
+##############################################################################
 class Timeline( Horizontal ):
     """Widget to display a horizontal timeline."""
+
+    title = reactive( "" )
+    """str: The title to five the timeline."""
 
     time_span = reactive( timedelta( weeks=1 ), init=False )
     """timedelta: The span of time the timeline will show in one go."""
@@ -79,6 +92,7 @@ class Timeline( Horizontal ):
         Returns:
             ComposeResult: The result of composing the widget.
         """
+        yield TimelineTitle( self.title )
         for day in self.dates:
             yield self._day_type( day )
 
