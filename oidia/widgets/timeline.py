@@ -22,6 +22,7 @@ class TimelineDay( Static ):
         text-align: center;
     }
     """
+    """str: The default styling for a `TimelineDay`."""
 
     day = reactive( date.today() )
     """date: The date of this day."""
