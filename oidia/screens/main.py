@@ -70,7 +70,13 @@ class Main( Screen ):
         content-align: left middle;
     }
 
-    StreakLine:focus-within TimelineTitle, StreakLine:focus-within StreakDay {
+    StreakLine:focus-within TimelineTitle {
+        text-style: bold;
+        border-left: wide $secondary;
+        padding-left: 1;
+    }
+
+    StreakLine:focus-within StreakDay {
         text-style: bold;
     }
 
