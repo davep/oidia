@@ -3,6 +3,7 @@
 ##############################################################################
 # Textual imports.
 from textual.app        import ComposeResult
+from textual.css.query  import NoMatches
 from textual.screen     import Screen
 from textual.widgets    import Header, Footer, Input
 from textual.containers import Vertical
@@ -151,6 +152,8 @@ class Main( Screen ):
         streak = self.query_one( "StreakLine:focus-within", StreakLine )
         streak.add_class( "editing" )
         await streak.mount( input := TitleInput( value=streak.title, placeholder="Title", id="streak-edit" ), before=0 )
+        if self.focused is not None:
+            self.focused.add_class( "back-here-please" )
         input.focus()
 
     async def on_input_submitted( self, event: Input.Submitted ) -> None:
@@ -181,5 +184,14 @@ class Main( Screen ):
 
         # Ensure any editing state is cleared.
         self.query( ".editing" ).remove_class( "editing" )
+
+        # Finally, let's see if we're supposed to settle focus back
+        # anywhere.
+        try:
+            return_to = self.query_one( ".back-here-please" )
+            return_to.focus()
+            return_to.remove_class( "back-here-please" )
+        except NoMatches:
+            pass
 
 ### main.py ends here
