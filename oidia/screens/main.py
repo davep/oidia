@@ -155,12 +155,22 @@ class Main( Screen ):
 
     async def action_edit( self ) -> None:
         """Edit the title of a timeline on the display."""
+
+        # Pull out the focused streak and mark it for editing.
         streak = self.query_one( "StreakLine:focus-within", StreakLine )
         streak.add_class( "editing" )
+
+        # Mount an input, set it to edit the title and focus it. Note that
+        # we place it at the start of the streak widget -- the CSS will hide
+        # the title itself while this is all happening (see the application
+        # of the "editing" class just above).
         await streak.mount( input := TitleInput( value=streak.title, placeholder="Title", id="streak-edit" ), before=0 )
+        input.focus()
+
+        # Finally, mark the actual focused widget as the one that was
+        # focused, so we can return to it post-edit.
         if self.focused is not None:
             self.focused.add_class( "back-here-please" )
-        input.focus()
 
     async def on_input_submitted( self, event: Input.Submitted ) -> None:
         """Handle the user submitting input.
