@@ -10,7 +10,7 @@ from textual.binding    import Binding
 
 ##############################################################################
 # Local imports.
-from ..widgets import Timeline, StreakLine, StreakDay
+from ..widgets import Timeline, TimelineTitle, StreakLine, StreakDay
 
 ##############################################################################
 class TitleInput( Input ):
@@ -31,7 +31,7 @@ class TitleInput( Input ):
         # though this is throwing up type warnings, but I'll run with it for
         # now. I'm told that `main` (what will be 0.6.0) addresses this.
         *Input.BINDINGS,
-        Binding( "escape", "cancel", "Cancel add" )
+        Binding( "escape", "cancel", "Cancel" )
     ]
     """list[ Binding ]: The bindings for the title input widget."""
 
@@ -69,8 +69,12 @@ class Main( Screen ):
         content-align: left middle;
     }
 
-    StreakLine:focus-within * {
+    StreakLine:focus-within TimelineTitle, StreakLine:focus-within StreakDay {
         text-style: bold;
+    }
+
+    StreakLine.editing TimelineTitle {
+        display: none;
     }
 
     StreakDay.done {
@@ -96,6 +100,7 @@ class Main( Screen ):
         Binding( "left_square_bracket",  "zoom(-1)", "Zoom In" ),
         Binding( "right_square_bracket", "zoom(1)",  "Zoom Out" ),
         Binding( "a",                    "add",      "Add Streak" ),
+        Binding( "enter",                "edit",     "Edit" ),
         Binding( "escape",               "app.quit", "Quit" )
     ]
     """list[ Binding ]: The bindings for the main screen."""
@@ -138,7 +143,14 @@ class Main( Screen ):
 
     async def action_add( self ) -> None:
         """Add a new timeline to the display."""
-        await self.query_one( "#streaks", Vertical ).mount( input := TitleInput( placeholder="Title" ) )
+        await self.query_one( "#streaks", Vertical ).mount( input := TitleInput( placeholder="Title", id="streak-add" ) )
+        input.focus()
+
+    async def action_edit( self ) -> None:
+        """Edit the title of a timeline on the display."""
+        streak = self.query_one( "StreakLine:focus-within", StreakLine )
+        streak.add_class( "editing" )
+        await streak.mount( input := TitleInput( value=streak.title, placeholder="Title", id="streak-edit" ), before=0 )
         input.focus()
 
     async def on_input_submitted( self, event: Input.Submitted ) -> None:
@@ -157,9 +169,17 @@ class Main( Screen ):
 
         # If the user entered a title...
         if title:
-            # ...add a new timeline associated with it.
-            await self.query_one( "#streaks", Vertical ).mount( line := StreakLine() )
-            line.title = title
-            line.query( StreakDay ).last().focus()
+            # If it's to add a new timeline...
+            if ( event.input.id or "" ) == "streak-add":
+                # ...add a new timeline associated with it.
+                await self.query_one( "#streaks", Vertical ).mount( line := StreakLine() )
+                line.title = title
+                line.query( StreakDay ).last().focus()
+            else:
+                # ...it's an edit. Set the new title.
+                self.query_one( "StreakLine.editing", StreakLine ).title = title
+
+        # Ensure any editing state is cleared.
+        self.query( ".editing" ).remove_class( "editing" )
 
 ### main.py ends here
