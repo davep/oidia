@@ -4,13 +4,47 @@
 # Textual imports.
 from textual.app        import ComposeResult
 from textual.screen     import Screen
-from textual.widgets    import Header, Footer
+from textual.widgets    import Header, Footer, Input
 from textual.containers import Vertical
 from textual.binding    import Binding
 
 ##############################################################################
 # Local imports.
 from ..widgets import Timeline, StreakLine
+
+##############################################################################
+class TitleInput( Input ):
+    """Widget for inputting a title."""
+
+    DEFAULT_CSS = """
+    TitleInput:focus {
+        border-left: none;
+        border-right: none;
+        width: 25;
+    }
+    """
+    """str: The styles for the title input widget."""
+
+    BINDINGS = [
+        # In 0.5.0 at least there's no reasonable method inheriting bindings
+        # and adding to them. So for now we do a sneaky splice... Annoyingly
+        # though this is throwing up type warnings, but I'll run with it for
+        # now. I'm told that `main` (what will be 0.6.0) addresses this.
+        *Input.BINDINGS,
+        Binding( "escape", "cancel", "Cancel add" )
+    ]
+    """list[ Binding ]: The bindings for the title input widget."""
+
+    async def action_cancel( self ) -> None:
+        """Provide a cancel action.
+
+        Note:
+            This empties the input and then performs the normal submit. It
+            is expected that the user of the class will check the input and
+            take an empty value to mean the input was cancelled.
+        """
+        self.value = ""
+        await self.action_submit()
 
 ##############################################################################
 class Main( Screen ):
@@ -28,6 +62,11 @@ class Main( Screen ):
 
     StreakLine TimelineTitle, StreakDay {
         background: $primary-background-darken-1;
+    }
+
+    TimelineTitle {
+        padding-left: 2;
+        content-align: left middle;
     }
     """
     """str: The styles for the main screen."""
@@ -70,10 +109,29 @@ class Main( Screen ):
         for timeline in self.query( Timeline ):
             timeline.zoom_days( days )
 
-    def action_add( self ) -> None:
+    async def action_add( self ) -> None:
         """Add a new timeline to the display."""
-        # TODO: For now this just adds one and does nothing else special
-        # with it. We're just testing what happens.
-        self.query_one( "#streaks", Vertical ).mount( StreakLine() )
+        await self.query_one( "#streaks", Vertical ).mount( input := TitleInput( placeholder="Title" ) )
+        input.focus()
+
+    def on_input_submitted( self, event: Input.Submitted ) -> None:
+        """Handle the user submitting input.
+
+        Args:
+            event (TitleInput.Submitted): The submit event.
+        """
+
+        # We're going to remove the input, so let's get its content before
+        # we do that.
+        title = event.input.value.strip()
+
+        # Now let's remove the input box.
+        event.input.remove()
+
+        # If the user entered a title...
+        if title:
+            # ...add a new timeline associated with it.
+            self.query_one( "#streaks", Vertical ).mount( line := StreakLine() )
+            line.title = title
 
 ### main.py ends here
