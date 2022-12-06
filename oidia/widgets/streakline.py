@@ -29,8 +29,8 @@ class StreakDay( TimelineDay, can_focus=True ):
     """str: The default styling for a streak day."""
 
     BINDINGS = [
-        Binding( "minus",       "done( -1 )", "Less Done", key_display="-" ),
-        Binding( "equals_sign", "done(  1 )", "More Done", key_display="=" )
+        Binding( "minus,backspace",   "done( -1 )", "Less Done", key_display="-" ),
+        Binding( "equals_sign,space", "done(  1 )", "More Done", key_display="=" )
     ]
     """list[ Binding ]: The bindings for a streak day."""
 
