@@ -80,6 +80,8 @@ class Main( Screen ):
     """str: The styles for the main screen."""
 
     BINDINGS = [
+        Binding( "left",                 "focus_previous", "", show=False ),
+        Binding( "right",                "focus_next", "", show=False ),
         Binding( "comma",                "move(-1)", "< day" ),
         Binding( "full_stop",            "move(1)",  "> day" ),
         Binding( "left_square_bracket",  "zoom(-1)", "Zoom In" ),
@@ -98,6 +100,14 @@ class Main( Screen ):
         yield Header( show_clock=True )
         yield Vertical( Timeline( id="header" ), id="streaks" )
         yield Footer()
+
+    def action_focus_previous( self ) -> None:
+        """Action wrapper for moving focus to the previous widget."""
+        self.focus_previous()
+
+    def action_focus_next( self ) -> None:
+        """Action wrapper for moving focus to the next widget."""
+        self.focus_next()
 
     def action_move( self, days: int ) -> None:
         """Move the timeline.
