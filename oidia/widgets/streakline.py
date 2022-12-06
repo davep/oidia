@@ -13,7 +13,7 @@ from textual.app import RenderResult
 from .timeline import TimelineDay, Timeline
 
 ##############################################################################
-class StreakDay( TimelineDay ):
+class StreakDay( TimelineDay, can_focus=True ):
     """Widget for tracking if a day is done or not."""
 
     def render( self ) -> RenderResult:

@@ -68,6 +68,14 @@ class Main( Screen ):
         padding-left: 2;
         content-align: left middle;
     }
+
+    StreakLine:focus-within * {
+        text-style: bold;
+    }
+
+    StreakDay:focus {
+        background: $primary-background-lighten-1;
+    }
     """
     """str: The styles for the main screen."""
 
