@@ -73,8 +73,17 @@ class Main( Screen ):
         text-style: bold;
     }
 
+    StreakDay.done {
+        background: green;
+    }
+
     StreakDay:focus {
         background: $primary-background-lighten-1;
+    }
+
+    StreakDay.done:focus {
+        color: darkgreen;
+        background: lightgreen;
     }
     """
     """str: The styles for the main screen."""
