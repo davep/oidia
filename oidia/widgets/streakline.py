@@ -22,7 +22,7 @@ class StreakDay( TimelineDay ):
         Returns:
             RenderResult: The content to render for the day.
         """
-        return " "
+        return ""
 
 ##############################################################################
 class StreakLine( Timeline ):
