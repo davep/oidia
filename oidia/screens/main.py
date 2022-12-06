@@ -11,7 +11,7 @@ from textual.binding    import Binding
 
 ##############################################################################
 # Local imports.
-from ..widgets import Timeline, TimelineTitle, StreakLine, StreakDay
+from ..widgets import Timeline, StreakLine, StreakDay
 
 ##############################################################################
 class TitleInput( Input ):
