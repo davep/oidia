@@ -37,7 +37,8 @@ class Main( Screen ):
         Binding( "right",                "move(1)",  "> day" ),
         Binding( "left_square_bracket",  "zoom(-1)", "Zoom In" ),
         Binding( "right_square_bracket", "zoom(1)",  "Zoom Out" ),
-        Binding( "a",                    "add",      "Add Streak" )
+        Binding( "a",                    "add",      "Add Streak" ),
+        Binding( "escape",               "app.quit", "Quit" )
     ]
     """list[ Binding ]: The bindings for the main screen."""
 
