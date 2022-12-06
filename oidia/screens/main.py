@@ -10,7 +10,7 @@ from textual.binding    import Binding
 
 ##############################################################################
 # Local imports.
-from ..widgets import Timeline, StreakLine
+from ..widgets import Timeline, StreakLine, StreakDay
 
 ##############################################################################
 class TitleInput( Input ):
@@ -122,7 +122,7 @@ class Main( Screen ):
         await self.query_one( "#streaks", Vertical ).mount( input := TitleInput( placeholder="Title" ) )
         input.focus()
 
-    def on_input_submitted( self, event: Input.Submitted ) -> None:
+    async def on_input_submitted( self, event: Input.Submitted ) -> None:
         """Handle the user submitting input.
 
         Args:
@@ -134,12 +134,13 @@ class Main( Screen ):
         title = event.input.value.strip()
 
         # Now let's remove the input box.
-        event.input.remove()
+        await event.input.remove()
 
         # If the user entered a title...
         if title:
             # ...add a new timeline associated with it.
-            self.query_one( "#streaks", Vertical ).mount( line := StreakLine() )
+            await self.query_one( "#streaks", Vertical ).mount( line := StreakLine() )
             line.title = title
+            line.query( StreakDay ).last().focus()
 
 ### main.py ends here
