@@ -80,8 +80,8 @@ class Main( Screen ):
     """str: The styles for the main screen."""
 
     BINDINGS = [
-        Binding( "left",                 "move(-1)", "< day" ),
-        Binding( "right",                "move(1)",  "> day" ),
+        Binding( "comma",                "move(-1)", "< day" ),
+        Binding( "full_stop",            "move(1)",  "> day" ),
         Binding( "left_square_bracket",  "zoom(-1)", "Zoom In" ),
         Binding( "right_square_bracket", "zoom(1)",  "Zoom Out" ),
         Binding( "a",                    "add",      "Add Streak" ),
