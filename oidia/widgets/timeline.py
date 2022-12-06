@@ -156,6 +156,15 @@ class Timeline( Horizontal ):
         ] )
         self.query_one( TimelineDays ).spanning( self.time_span )
 
+    def adjust_day( self, day: TimelineDay, delta: timedelta ) -> None:
+        """Adjust the date of a given timeline day.
+
+        Args:
+            day (TimelineDay): The day widget to adjust.
+            delta (timedelta): The period of time to adjust by.
+        """
+        day.day += delta
+
     def watch_end_date( self, old_date: date, new_date: date ) -> None:
         """React to changes to the end date for the display.
 
@@ -165,7 +174,7 @@ class Timeline( Horizontal ):
         """
         diff = new_date - old_date
         for day in self.query( TimelineDay ):
-            day.day += diff
+            self.adjust_day( day, diff )
 
     def move_days( self, days: int ) -> None:
         """Move the timeline by a given number of days.
