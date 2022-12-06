@@ -90,7 +90,7 @@ class TimelineDays( Grid ):
 class Timeline( Horizontal ):
     """Widget to display a horizontal timeline."""
 
-    title = reactive( "" )
+    title = reactive( "", init=False )
     """str: The title to five the timeline."""
 
     time_span = reactive( timedelta( weeks=1 ), init=False )
@@ -134,6 +134,14 @@ class Timeline( Horizontal ):
     def on_mount( self ):
         """Set up the display after it has been mounted."""
         self.query_one( TimelineDays ).spanning( self.time_span )
+
+    def watch_title( self, new_title: str ) -> None:
+        """Update the title when a new one is set.
+
+        Args:
+            new_title (str): The new title.
+        """
+        self.query_one( TimelineTitle ).update( new_title )
 
     def watch_time_span( self, new_span: timedelta ) -> None:
         """React to changes to the time span of the timeline.
