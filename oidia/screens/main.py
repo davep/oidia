@@ -61,14 +61,14 @@ class Main( Screen ):
     """str: The styles for the main screen."""
 
     BINDINGS = [
-        Binding( "left",                 "focus_left", "", show=False ),
+        Binding( "left",                 "focus_left",  "", show=False ),
         Binding( "right",                "focus_right", "", show=False ),
-        Binding( "comma",                "move(-1)", "< day" ),
-        Binding( "full_stop",            "move(1)",  "> day" ),
-        Binding( "left_square_bracket",  "zoom(-1)", "Zoom In" ),
-        Binding( "right_square_bracket", "zoom(1)",  "Zoom Out" ),
-        Binding( "a",                    "add",      "Add Streak" ),
-        Binding( "escape",               "app.quit", "Quit" )
+        Binding( "comma",                "move(-1)",    "< day" ),
+        Binding( "full_stop",            "move(1)",     "> day" ),
+        Binding( "left_square_bracket",  "zoom(-1)",    "Zoom In" ),
+        Binding( "right_square_bracket", "zoom(1)",     "Zoom Out" ),
+        Binding( "a",                    "add",         "Add Streak" ),
+        Binding( "escape",               "app.quit",    "Quit" )
     ]
     """list[ Binding ]: The bindings for the main screen."""
 
