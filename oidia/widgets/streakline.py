@@ -12,6 +12,7 @@ from textual.app      import RenderResult
 from textual.reactive import reactive
 from textual.binding  import Binding
 from textual.message  import Message
+from textual.events   import Click
 
 ##############################################################################
 # Local imports.
@@ -89,6 +90,23 @@ class StreakDay( TimelineDay, can_focus=True ):
             this_many (int): The amount to change the done count by.
         """
         self.done = max( 0, self.done + this_many )
+
+    def on_click( self, event: Click ) -> None:
+        """Handle a mouse click event.
+
+        Args:
+            event (Click): The click event.
+
+        Note:
+            Implements the ability to increase or decrease the done count
+            for a day using the mouse. A non-modified mouse click is left
+            alone. Ctrl+Click or Meta+Click increases the done count.
+            Shift+Click decreases it.
+        """
+        if event.ctrl or event.meta:
+            self.action_done( 1 )
+        elif event.shift:
+            self.action_done( -1 )
 
 ##############################################################################
 class StreakLine( Timeline ):
