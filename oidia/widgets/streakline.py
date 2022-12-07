@@ -14,6 +14,7 @@ from textual.binding   import Binding
 from textual.message   import Message
 from textual.events    import Click
 from textual.css.query import NoMatches
+from textual.widget    import Widget
 
 ##############################################################################
 # Local imports.
@@ -121,8 +122,10 @@ class StreakLine( Timeline ):
     """
 
     BINDINGS = [
-        Binding( "enter",  "edit",   "Edit" ),
-        Binding( "ctrl+d", "delete", "delete" )
+        Binding( "enter",     "edit",   "Edit" ),
+        Binding( "ctrl+d",    "delete", "Delete" ),
+        Binding( "ctrl+up",   "up",     "Up" ),
+        Binding( "ctrl+down", "down",   "Down" )
     ]
     """list[ Binding ]: The bindings for the widget."""
 
@@ -130,6 +133,19 @@ class StreakLine( Timeline ):
         """Initialise the streak line."""
         super().__init__( *args, **kwargs )
         self._streaks: defaultdict[ date, int ] = defaultdict( int )
+
+    @property
+    def is_first( self ) -> bool:
+        """bool: Is this the first streak in the list?"""
+        # TODO: 1 allows for the header, but I'm going to move the header
+        # out of the parent list soon so its always at the top. Keep this in
+        # mind.
+        return self.parent is not None and self.parent.children[ 1 ] == self
+
+    @property
+    def is_last( self ) -> bool:
+        """bool: Is this the last streak in the list?"""
+        return self.parent is not None and self.parent.children[ -1 ] == self
 
     def make_my_day( self, day: date ) -> StreakDay:
         """Make a day widget for the given day.
@@ -227,5 +243,25 @@ class StreakLine( Timeline ):
     def action_delete( self ) -> None:
         """Delete the current streak."""
         self.remove()
+
+    def action_up( self ) -> None:
+        """Move the streak up the list of streaks."""
+        if self.parent is not None and not self.is_first:
+            parent = cast( Widget, self.parent )
+            parent.move_child(
+                self, before=parent.children.index( self ) - 1
+            )
+            # TODO: inform parent.
+            self.scroll_visible()
+
+    def action_down( self ) -> None:
+        """Move the streak down the list of streaks."""
+        if self.parent is not None and not self.is_last:
+            parent = cast( Widget, self.parent )
+            parent.move_child(
+                self, after=parent.children.index( self ) + 1
+            )
+            # TODO: inform parent.
+            self.scroll_visible()
 
 ### streakline.py ends here

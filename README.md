@@ -18,7 +18,7 @@ No judgement.
 It's currently a work in progress and the following still needs to be done.
 
 - [ ] Saving progress (that'll happen before I reveal this)
-- [ ] Reorder streaks.
+- [X] Reorder streaks.
 - [X] Delete streaks.
 - [ ] Add a help screen.
 
