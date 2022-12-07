@@ -63,10 +63,10 @@ class Streaks( Vertical ):
             indent = 4
         ) )
 
-    def load( self ) -> None:
+    async def load( self ) -> None:
         """Load any streak data from storage."""
         if self.data_file.exists():
-            self.mount( *[
+            await self.mount( *[
                 StreakLine.from_dict( streak )
                 for streak in loads( self.data_file.read_text() )
             ] )
@@ -188,9 +188,11 @@ class Main( Screen ):
         yield Container( Timeline( id="header" ), self.streaks )
         yield Footer()
 
-    def on_mount( self ) -> None:
+    async def on_mount( self ) -> None:
         """Set up the screen on mount."""
-        self.streaks.load()
+        await self.streaks.load()
+        if len( self.streaks.children ) > 0:
+            self.streaks[ 0 ].query( StreakDay ).last().focus()
 
     def action_focus_left( self ) -> None:
         """Action wrapper for moving focus to the left."""
