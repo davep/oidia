@@ -3,16 +3,14 @@
 ##############################################################################
 # Textual imports.
 from textual.app        import ComposeResult
-from textual.css.query  import NoMatches
 from textual.screen     import Screen
 from textual.widgets    import Header, Footer, Input
 from textual.containers import Vertical
 from textual.binding    import Binding
-from textual.events     import Click
 
 ##############################################################################
 # Local imports.
-from ..widgets import TimelineTitle, Timeline, StreakLine, StreakDay, TitleInput
+from ..widgets import Timeline, StreakLine, StreakDay, TitleInput
 
 ##############################################################################
 class Main( Screen ):
