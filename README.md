@@ -13,13 +13,22 @@ That's it.
 
 No judgement.
 
-## TODO
+## Usage
 
-It's currently a work in progress and the following still needs to be done.
+I aim to add a help screen so that the keys etc will be visible within the
+application. Hopefully though most features can be found from the footer or
+are easily discovered. The main points are:
 
-- [ ] Saving progress (that'll happen before I reveal this)
-- [X] Reorder streaks.
-- [X] Delete streaks.
-- [ ] Add a help screen.
+- <kbd>a</kbd> adds a new streak
+- <kbd>Ctrl+d</kbd> deletes a new streak
+- <kbd>Ctrl+Up</kbd> moves a streak up
+- <kbd>Ctrl+Down</kbd> moves a streak down
+- <kbd>Enter</kbd> edits the title of a streak
+- <kbd>Space</kbd> or <kbd>=</kbd> increase the count for a day
+- <kbd>Backspace</kbd> or <kbd>-</kbd> decrease the count for a day
+- <kbd>,</kbd> shifts the timeline back in time
+- <kbd>.</kbd> shifts the timeline forward in time
+- <kbd>[</kbd> zooms the timeline in
+- <kbd>]</kbd> zooms the timeline out
 
 [//]: # (README.md ends here)
