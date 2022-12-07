@@ -121,7 +121,8 @@ class StreakLine( Timeline ):
     """
 
     BINDINGS = [
-        Binding( "enter", "edit", "Edit" )
+        Binding( "enter",  "edit",   "Edit" ),
+        Binding( "ctrl+d", "delete", "delete" )
     ]
     """list[ Binding ]: The bindings for the widget."""
 
@@ -222,5 +223,9 @@ class StreakLine( Timeline ):
         if isinstance( target, TimelineTitle ) and isinstance( target.parent, StreakLine ) and event.shift:
             event.prevent_default()
             await self.action_edit()
+
+    def action_delete( self ) -> None:
+        """Delete the current streak."""
+        self.remove()
 
 ### streakline.py ends here
