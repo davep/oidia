@@ -161,9 +161,6 @@ class StreakLine( Timeline ):
         super().adjust_day( day, delta )
         cast( StreakDay, day ).done = self._streaks[ day.day ]
 
-    class Edit( Message ):
-        """Message used to indicate that the user has requested an edit."""
-
     async def action_edit( self ) -> None:
 
         # Place the streak in editing mode.
