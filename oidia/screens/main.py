@@ -4,7 +4,7 @@
 # Python imports.
 from typing  import cast, Final, Any
 from pathlib import Path
-from json    import dumps, JSONEncoder
+from json    import dumps, loads, JSONEncoder
 
 ##############################################################################
 # Textual imports.
@@ -62,6 +62,14 @@ class Streaks( Vertical ):
             cls    = self.Encoder,
             indent = 4
         ) )
+
+    def load( self ) -> None:
+        """Load any streak data from storage."""
+        if self.data_file.exists():
+            self.mount( *[
+                StreakLine.from_dict( streak )
+                for streak in loads( self.data_file.read_text() )
+            ] )
 
     @property
     def focused_streak( self ) -> StreakLine | None:
@@ -179,6 +187,10 @@ class Main( Screen ):
         self.streaks = Streaks()
         yield Container( Timeline( id="header" ), self.streaks )
         yield Footer()
+
+    def on_mount( self ) -> None:
+        """Set up the screen on mount."""
+        self.streaks.load()
 
     def action_focus_left( self ) -> None:
         """Action wrapper for moving focus to the left."""

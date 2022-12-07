@@ -129,10 +129,10 @@ class StreakLine( Timeline ):
     ]
     """list[ Binding ]: The bindings for the widget."""
 
-    def __init__( self, *args: Any, **kwargs: Any ) -> None:
+    def __init__( self, *args: Any, start: dict[ date, int ] | None=None, **kwargs: Any ) -> None:
         """Initialise the streak line."""
         super().__init__( *args, **kwargs )
-        self._streaks: defaultdict[ date, int ] = defaultdict( int )
+        self._streaks: defaultdict[ date, int ] = defaultdict( int, start or {} )
 
     @property
     def as_dict( self ) -> dict[ str, str | dict[ str, int ] ]:
@@ -146,6 +146,23 @@ class StreakLine( Timeline ):
                 day.isoformat(): count for day, count in self._streaks.items() if count > 0
             }
         }
+
+    @classmethod
+    def from_dict( cls, data: dict[ str, str | dict[ str, int ] ] ) -> "StreakLine":
+        """Create a fresh instance of a `StreakLine` from a dictionary.
+
+        Args:
+            data ([ str, str | dict[ str, int ] ]): The data to load up.
+
+        Returns:
+            StreakLine: The new widget to show the streak.
+        """
+        streak = cls( start={
+            date.fromisoformat( day ): count for day, count
+            in cast( dict[ str, int ], data[ "days" ] ).items()
+        } )
+        streak.title = data[ "title" ]
+        return streak
 
     @property
     def is_first( self ) -> bool:
