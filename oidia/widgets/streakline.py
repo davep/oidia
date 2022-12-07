@@ -249,8 +249,8 @@ class StreakLine( Timeline ):
         # we place it at the start of the streak widget -- the CSS will hide
         # the title itself while this is all happening (see the application
         # of the "editing" class just above).
-        await self.mount( input := TitleInput( value=self.title, placeholder="New title" ), before=0 )
-        input.focus()
+        await self.mount( title_input := TitleInput( value=self.title, placeholder="New title" ), before=0 )
+        title_input.focus()
 
         # Finally, mark the actual focused widget as the one that was
         # focused, so we can return to it post-edit.

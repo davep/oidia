@@ -234,8 +234,8 @@ class Main( Screen ):
 
     async def action_add( self ) -> None:
         """Add a new timeline to the display."""
-        await self.streaks.mount( input := TitleInput( placeholder="Title", id="streak-add" ) )
-        input.focus()
+        await self.streaks.mount( title_input := TitleInput( placeholder="Title", id="streak-add" ) )
+        title_input.focus()
 
     async def on_input_submitted( self, event: Input.Submitted ) -> None:
         """Handle the user submitting input.
