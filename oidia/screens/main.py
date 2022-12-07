@@ -10,45 +10,9 @@ from textual.containers import Vertical
 from textual.binding    import Binding
 from textual.events     import Click
 
-from oidia.widgets.timeline import TimelineTitle
-
 ##############################################################################
 # Local imports.
-from ..widgets import Timeline, StreakLine, StreakDay
-
-##############################################################################
-class TitleInput( Input ):
-    """Widget for inputting a title."""
-
-    DEFAULT_CSS = """
-    TitleInput:focus {
-        border-left: none;
-        border-right: none;
-        width: 25;
-    }
-    """
-    """str: The styles for the title input widget."""
-
-    BINDINGS = [
-        # In 0.5.0 at least there's no reasonable method inheriting bindings
-        # and adding to them. So for now we do a sneaky splice... Annoyingly
-        # though this is throwing up type warnings, but I'll run with it for
-        # now. I'm told that `main` (what will be 0.6.0) addresses this.
-        *Input.BINDINGS,
-        Binding( "escape", "cancel", "Cancel" )
-    ]
-    """list[ Binding ]: The bindings for the title input widget."""
-
-    async def action_cancel( self ) -> None:
-        """Provide a cancel action.
-
-        Note:
-            This empties the input and then performs the normal submit. It
-            is expected that the user of the class will check the input and
-            take an empty value to mean the input was cancelled.
-        """
-        self.value = ""
-        await self.action_submit()
+from ..widgets import TimelineTitle, Timeline, StreakLine, StreakDay, TitleInput
 
 ##############################################################################
 class Main( Screen ):
@@ -83,10 +47,6 @@ class Main( Screen ):
         text-style: bold;
     }
 
-    StreakLine.editing TimelineTitle {
-        display: none;
-    }
-
     StreakDay.done {
         background: green;
     }
@@ -110,7 +70,6 @@ class Main( Screen ):
         Binding( "left_square_bracket",  "zoom(-1)", "Zoom In" ),
         Binding( "right_square_bracket", "zoom(1)",  "Zoom Out" ),
         Binding( "a",                    "add",      "Add Streak" ),
-        Binding( "enter",                "edit",     "Edit" ),
         Binding( "escape",               "app.quit", "Quit" )
     ]
     """list[ Binding ]: The bindings for the main screen."""
@@ -156,25 +115,6 @@ class Main( Screen ):
         await self.query_one( "#streaks", Vertical ).mount( input := TitleInput( placeholder="Title", id="streak-add" ) )
         input.focus()
 
-    async def action_edit( self ) -> None:
-        """Edit the title of a timeline on the display."""
-
-        # Pull out the focused streak and mark it for editing.
-        streak = self.query_one( "StreakLine:focus-within", StreakLine )
-        streak.add_class( "editing" )
-
-        # Mount an input, set it to edit the title and focus it. Note that
-        # we place it at the start of the streak widget -- the CSS will hide
-        # the title itself while this is all happening (see the application
-        # of the "editing" class just above).
-        await streak.mount( input := TitleInput( value=streak.title, placeholder="Title", id="streak-edit" ), before=0 )
-        input.focus()
-
-        # Finally, mark the actual focused widget as the one that was
-        # focused, so we can return to it post-edit.
-        if self.focused is not None:
-            self.focused.add_class( "back-here-please" )
-
     async def on_input_submitted( self, event: Input.Submitted ) -> None:
         """Handle the user submitting input.
 
@@ -191,27 +131,10 @@ class Main( Screen ):
 
         # If the user entered a title...
         if title:
-            # If it's to add a new timeline...
-            if ( event.input.id or "" ) == "streak-add":
-                # ...add a new timeline associated with it.
-                await self.query_one( "#streaks", Vertical ).mount( line := StreakLine() )
-                line.title = title
-                line.query( StreakDay ).last().focus()
-            else:
-                # ...it's an edit. Set the new title.
-                self.query_one( "StreakLine.editing", StreakLine ).title = title
-
-        # Ensure any editing state is cleared.
-        self.query( ".editing" ).remove_class( "editing" )
-
-        # Finally, let's see if we're supposed to settle focus back
-        # anywhere.
-        try:
-            return_to = self.query_one( ".back-here-please" )
-            return_to.focus()
-            return_to.remove_class( "back-here-please" )
-        except NoMatches:
-            pass
+            # ...add a new timeline associated with it.
+            await self.query_one( "#streaks", Vertical ).mount( line := StreakLine() )
+            line.title = title
+            line.query( StreakDay ).last().focus()
 
     async def on_click( self, event: Click ) -> None:
         """Handle clicks on the screen.

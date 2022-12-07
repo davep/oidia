@@ -2,8 +2,9 @@
 
 ##############################################################################
 # Local imports.
-from .timeline   import TimelineTitle, TimelineDay, Timeline
-from .streakline import StreakDay, StreakLine
+from .timeline    import TimelineTitle, TimelineDay, Timeline
+from .streakline  import StreakDay, StreakLine
+from .title_input import TitleInput
 
 ##############################################################################
 # Exports.
@@ -12,7 +13,8 @@ __all__ = [
     "TimelineDay",
     "Timeline",
     "StreakDay",
-    "StreakLine"
+    "StreakLine",
+    "TitleInput"
 ]
 
 ### __init__.py ends here

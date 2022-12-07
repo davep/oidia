@@ -8,15 +8,17 @@ from collections import defaultdict
 
 ##############################################################################
 # Textual imports.
-from textual.app      import RenderResult
-from textual.reactive import reactive
-from textual.binding  import Binding
-from textual.message  import Message
-from textual.events   import Click
+from textual.app       import RenderResult
+from textual.reactive  import reactive
+from textual.binding   import Binding
+from textual.message   import Message
+from textual.events    import Click
+from textual.css.query import NoMatches
 
 ##############################################################################
 # Local imports.
-from .timeline import TimelineDay, Timeline
+from .timeline    import TimelineDay, Timeline
+from .title_input import TitleInput
 
 ##############################################################################
 class StreakDay( TimelineDay, can_focus=True ):
@@ -112,6 +114,17 @@ class StreakDay( TimelineDay, can_focus=True ):
 class StreakLine( Timeline ):
     """Widget to display a horizontal timeline of streak results."""
 
+    DEFAULT_CSS = """
+    StreakLine.editing TimelineTitle {
+        display: none;
+    }
+    """
+
+    BINDINGS = [
+        Binding( "enter", "edit", "Edit" )
+    ]
+    """list[ Binding ]: The bindings for the widget."""
+
     def __init__( self, *args: Any, **kwargs: Any ) -> None:
         """Initialise the streak line."""
         super().__init__( *args, **kwargs )
@@ -147,5 +160,59 @@ class StreakLine( Timeline ):
         """
         super().adjust_day( day, delta )
         cast( StreakDay, day ).done = self._streaks[ day.day ]
+
+    class Edit( Message ):
+        """Message used to indicate that the user has requested an edit."""
+
+    async def action_edit( self ) -> None:
+
+        # Place the streak in editing mode.
+        self.add_class( "editing" )
+
+        # Mount an input, set it to edit the title and focus it. Note that
+        # we place it at the start of the streak widget -- the CSS will hide
+        # the title itself while this is all happening (see the application
+        # of the "editing" class just above).
+        await self.mount( input := TitleInput( value=self.title, placeholder="New title" ), before=0 )
+        input.focus()
+
+        # Finally, mark the actual focused widget as the one that was
+        # focused, so we can return to it post-edit.
+        if self.screen.focused is not None:
+            self.screen.focused.add_class( "back-here-please" )
+
+    async def on_input_submitted( self, event: TitleInput.Submitted ) -> None:
+        """Handle the user submitting input.
+
+        Args:
+            event (TitleInput.Submitted): The submit event.
+        """
+
+        # We don't want this event bubbling up the DOM. If we got this it's
+        # an edit event. That's on us.
+        event.prevent_default()
+
+        # Let's make sure focus is back to where it should be.
+        try:
+            return_to = self.query_one( ".back-here-please" )
+            return_to.focus()
+            return_to.remove_class( "back-here-please" )
+        except NoMatches:
+            pass
+
+        # We're going to remove the input, so let's get its content before
+        # we do that.
+        title = event.input.value.strip()
+
+        # Now let's remove the input box.
+        await event.input.remove()
+
+        # If the user entered a title...
+        if title:
+            # ...go with it.
+            self.title = title
+
+        # Ensure any editing state is cleared.
+        self.remove_class( "editing" )
 
 ### streakline.py ends here
