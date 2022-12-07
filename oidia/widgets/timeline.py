@@ -133,7 +133,7 @@ class Timeline( Horizontal ):
         ] )
         yield self.days
 
-    def on_mount( self ):
+    def on_mount( self ) -> None:
         """Set up the display after it has been mounted."""
         self.days.spanning( self.time_span )
 
