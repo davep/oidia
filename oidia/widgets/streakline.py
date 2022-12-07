@@ -241,6 +241,7 @@ class StreakLine( Timeline ):
         cast( StreakDay, day ).done = self._streaks[ day.day ]
 
     async def action_edit( self ) -> None:
+        """Start the process of editing the title of a streak."""
 
         # Place the streak in editing mode.
         self.add_class( "editing" )
