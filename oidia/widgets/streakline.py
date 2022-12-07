@@ -161,7 +161,7 @@ class StreakLine( Timeline ):
             date.fromisoformat( day ): count for day, count
             in cast( dict[ str, int ], data[ "days" ] ).items()
         } )
-        streak.title = data[ "title" ]
+        streak.title = str( data[ "title" ] )
         return streak
 
     @property
