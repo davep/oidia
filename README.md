@@ -31,4 +31,8 @@ are easily discovered. The main points are:
 - <kbd>[</kbd> zooms the timeline in
 - <kbd>]</kbd> zooms the timeline out
 
+## TODO
+
+- [ ] Improve focus settling when moving things around
+
 [//]: # (README.md ends here)
