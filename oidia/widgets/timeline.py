@@ -9,6 +9,7 @@ from datetime import date, timedelta
 # Textual imports.
 from textual.app        import ComposeResult, RenderResult
 from textual.containers import Horizontal, Grid
+from textual.css.query  import NoMatches
 from textual.reactive   import reactive
 from textual.widgets    import Static, Label
 
@@ -142,7 +143,10 @@ class Timeline( Horizontal ):
         Args:
             new_title (str): The new title.
         """
-        self.query_one( TimelineTitle ).update( new_title )
+        try:
+            self.query_one( TimelineTitle ).update( new_title )
+        except NoMatches:
+            pass
 
     def watch_time_span( self, new_span: timedelta ) -> None:
         """React to changes to the time span of the timeline.
