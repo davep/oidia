@@ -13,6 +13,8 @@ That's it.
 
 No judgement.
 
+![OIDIA in action](./oidia.png)
+
 ## Usage
 
 I aim to add a help screen so that the keys etc will be visible within the
