@@ -17,7 +17,7 @@ from textual.css.query import NoMatches
 
 ##############################################################################
 # Local imports.
-from .timeline    import TimelineDay, Timeline
+from .timeline    import TimelineTitle, TimelineDay, Timeline
 from .title_input import TitleInput
 
 ##############################################################################
@@ -211,5 +211,16 @@ class StreakLine( Timeline ):
 
         # Ensure any editing state is cleared.
         self.remove_class( "editing" )
+
+    async def on_click( self, event: Click ) -> None:
+        """Handle clicks on the widget.
+
+        Args:
+            event (Click): The click event.
+        """
+        target, _ = self.screen.get_widget_at( event.screen_x, event.screen_y )
+        if isinstance( target, TimelineTitle ) and isinstance( target.parent, StreakLine ) and event.shift:
+            event.prevent_default()
+            await self.action_edit()
 
 ### streakline.py ends here

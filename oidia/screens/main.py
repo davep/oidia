@@ -136,21 +136,4 @@ class Main( Screen ):
             line.title = title
             line.query( StreakDay ).last().focus()
 
-    async def on_click( self, event: Click ) -> None:
-        """Handle clicks on the screen.
-
-        Args:
-            event (Click): The click event.
-
-        Note:
-            While normally you'd add this sort of event handler to the
-            widgets that should deal with the event, in this case I don't
-            want to place the screen-level work and knowledge in the widgets
-            themselves. So we capture mouse clicks at this level and filter
-            them.
-        """
-        target, _ = self.get_widget_at( event.screen_x, event.screen_y )
-        if isinstance( target, TimelineTitle ) and isinstance( target.parent, StreakLine ) and event.shift:
-            await self.action_edit()
-
 ### main.py ends here
