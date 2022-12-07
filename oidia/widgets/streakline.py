@@ -186,6 +186,9 @@ class StreakLine( Timeline ):
         """
         return StreakDay( day, self._streaks[ day ] )
 
+    class Updated( Message ):
+        """Message sent when a streak is updated in some way."""
+
     def on_streak_day_updated( self, event: StreakDay.Updated ) -> None:
         """React to the done count of a day being changed.
 
@@ -195,6 +198,7 @@ class StreakLine( Timeline ):
         self._streaks[ event.day ] = event.done
         if self._streaks[ event.day ] == 0:
             del self._streaks[ event.day ]
+        self.emit_no_wait( self.Updated( self ) )
 
     def adjust_day( self, day: TimelineDay, delta: timedelta ) -> None:
         """Adjust the date of a given timeline day.
@@ -257,6 +261,9 @@ class StreakLine( Timeline ):
         # Ensure any editing state is cleared.
         self.remove_class( "editing" )
 
+        # Let anyone above us know we changed stuff.
+        self.emit_no_wait( self.Updated( self ) )
+
     async def on_click( self, event: Click ) -> None:
         """Handle clicks on the widget.
 
@@ -268,9 +275,10 @@ class StreakLine( Timeline ):
             event.prevent_default()
             await self.action_edit()
 
-    def action_delete( self ) -> None:
+    async def action_delete( self ) -> None:
         """Delete the current streak."""
-        self.remove()
+        await self.emit( self.Updated( self ) )
+        await self.remove()
 
     def action_up( self ) -> None:
         """Move the streak up the list of streaks."""
@@ -279,7 +287,7 @@ class StreakLine( Timeline ):
             parent.move_child(
                 self, before=parent.children.index( self ) - 1
             )
-            # TODO: inform parent.
+            self.emit_no_wait( self.Updated( self ) )
             self.scroll_visible()
 
     def action_down( self ) -> None:
@@ -289,7 +297,7 @@ class StreakLine( Timeline ):
             parent.move_child(
                 self, after=parent.children.index( self ) + 1
             )
-            # TODO: inform parent.
+            self.emit_no_wait( self.Updated( self ) )
             self.scroll_visible()
 
 ### streakline.py ends here
