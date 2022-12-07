@@ -191,7 +191,7 @@ class StreakLine( Timeline ):
 
         # Let's make sure focus is back to where it should be.
         try:
-            return_to = self.query_one( ".back-here-please" )
+            return_to = self.screen.query_one( ".back-here-please" )
             return_to.focus()
             return_to.remove_class( "back-here-please" )
         except NoMatches:
