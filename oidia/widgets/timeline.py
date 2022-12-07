@@ -127,13 +127,14 @@ class Timeline( Horizontal ):
             ComposeResult: The result of composing the widget.
         """
         yield TimelineTitle( self.title )
-        yield TimelineDays( self.time_span, *[
+        self.days = TimelineDays( self.time_span, *[
             self.make_my_day( day ) for day in self.dates
         ] )
+        yield self.days
 
     def on_mount( self ):
         """Set up the display after it has been mounted."""
-        self.query_one( TimelineDays ).spanning( self.time_span )
+        self.days.spanning( self.time_span )
 
     def watch_title( self, new_title: str ) -> None:
         """Update the title when a new one is set.
@@ -150,11 +151,11 @@ class Timeline( Horizontal ):
             new_span (timedelta): The new timespan for the timeline.
         """
         self.query( TimelineDay ).remove()
-        self.query_one( TimelineDays ).mount( *[
+        self.days.mount( *[
             self.make_my_day( self.end_date - timedelta( days=day ) )
             for day in reversed( range( new_span.days ) )
         ] )
-        self.query_one( TimelineDays ).spanning( self.time_span )
+        self.days.spanning( self.time_span )
 
     def adjust_day( self, day: TimelineDay, delta: timedelta ) -> None:
         """Adjust the date of a given timeline day.
