@@ -135,6 +135,19 @@ class StreakLine( Timeline ):
         self._streaks: defaultdict[ date, int ] = defaultdict( int )
 
     @property
+    def as_dict( self ) -> dict[ str, str | dict[ str, int ] ]:
+        """dict[ str, str | dict[ str, int ] ]: The streak as a dictionary.
+
+        This is intended to be converted into JSON data.
+        """
+        return {
+            "title": self.title,
+            "days": {
+                day.isoformat(): count for day, count in self._streaks.items() if count > 0
+            }
+        }
+
+    @property
     def is_first( self ) -> bool:
         """bool: Is this the first streak in the list?"""
         return self.parent is not None and self.parent.children[ 0 ] == self
