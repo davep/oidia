@@ -147,6 +147,37 @@ class StreakLine( Timeline ):
         """bool: Is this the last streak in the list?"""
         return self.parent is not None and self.parent.children[ -1 ] == self
 
+    @property
+    def contains_focus( self ) -> bool:
+        """bool: Does this streak line contain focus?"""
+        return bool( self.query( "*:focus-within" ) )
+
+    def steal_focus( self, from_streak: "StreakLine" ) -> None:
+        """Steal focus from another streak.
+
+        Args:
+            from_streak (StreakLine): The streak to steal from.
+        """
+
+        # There's no point in doing anything if the other streak line
+        # doesn't have focus (note the check of the screen's knowledge of
+        # focus too to keep type checkers happy because focused can be
+        # None).
+        if not ( self.screen.focused and from_streak.contains_focus ):
+            return
+
+        # This is more to keep the type checkers happy really, but on the
+        # office chance we have landed here with a parent missing, let's not
+        # bother doing anything else.
+        if from_streak.parent is None or self.parent is None:
+            return
+
+        # Set focus to a child widget that's in the position as the one
+        # that's focused in the other streak.
+        self.days.children[
+            from_streak.days.children.index( self.screen.focused )
+        ].focus()
+
     def make_my_day( self, day: date ) -> StreakDay:
         """Make a day widget for the given day.
 
