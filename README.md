@@ -34,5 +34,6 @@ are easily discovered. The main points are:
 ## TODO
 
 - [ ] Improve focus settling when moving things around
+- [ ] Add a help screen
 
 [//]: # (README.md ends here)
