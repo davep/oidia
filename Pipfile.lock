@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a11d92f82fda42908621b0fe60be141c6a98d755dc098d09fab6963e743b47e0"
+            "sha256": "7126be346ba11b1b28cca7c94a00158ce0159f9456beea9d2bd122218bc5d8a0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -421,6 +421,14 @@
             "index": "pypi",
             "version": "==0.5.0"
         },
+        "xdg": {
+            "hashes": [
+                "sha256:865a7b56ed1d4cd2fce2ead1eddf97360843619757f473cd90b75f1817ca541d",
+                "sha256:aa619f26ccec6088b2a6018721d4ee86e602099b24644a90a8d3308a25acd06c"
+            ],
+            "index": "pypi",
+            "version": "==5.1.1"
+        },
         "yarl": {
             "hashes": [
                 "sha256:009a028127e0a1755c38b03244c0bea9d5565630db9c4cf9572496e947137a87",
@@ -700,11 +708,11 @@
         },
         "platformdirs": {
             "hashes": [
-                "sha256:1006647646d80f16130f052404c6b901e80ee4ed6bef6792e1f238a8969106f7",
-                "sha256:af0276409f9a02373d540bf8480021a048711d572745aef4b7842dad245eba10"
+                "sha256:1a89a12377800c81983db6be069ec068eee989748799b946cce2a6e80dcc54ca",
+                "sha256:b46ffafa316e6b83b47489d240ce17173f123a9b9c83282141c3daf26ad9ac2e"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2.5.4"
+            "version": "==2.6.0"
         },
         "pygments": {
             "hashes": [
@@ -716,11 +724,11 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:1d561d1d3e8be9dd880edc685162fbdaa0409c88b9b7400873c0cf345602e326",
-                "sha256:91e4776dbcb4b4d921a3e4b6fec669551107ba11f29d9199154a01622e460a57"
+                "sha256:ea82cd6a1e11062dc86d555d07c021b0fb65afe39becbe6fe692efd6c4a67443",
+                "sha256:ec4a87c33da054ab86a6c79afa6771dc8765cb5631620053e727fcf3ef8cbed7"
             ],
             "index": "pypi",
-            "version": "==2.15.7"
+            "version": "==2.15.8"
         },
         "readme-renderer": {
             "hashes": [
