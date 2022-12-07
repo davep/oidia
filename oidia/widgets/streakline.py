@@ -137,10 +137,7 @@ class StreakLine( Timeline ):
     @property
     def is_first( self ) -> bool:
         """bool: Is this the first streak in the list?"""
-        # TODO: 1 allows for the header, but I'm going to move the header
-        # out of the parent list soon so its always at the top. Keep this in
-        # mind.
-        return self.parent is not None and self.parent.children[ 1 ] == self
+        return self.parent is not None and self.parent.children[ 0 ] == self
 
     @property
     def is_last( self ) -> bool:

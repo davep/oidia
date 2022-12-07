@@ -10,7 +10,7 @@ from textual.app        import ComposeResult
 from textual.css.query  import NoMatches
 from textual.screen     import Screen
 from textual.widgets    import Header, Footer, Input
-from textual.containers import Vertical
+from textual.containers import Container, Vertical
 from textual.binding    import Binding
 
 ##############################################################################
@@ -20,6 +20,13 @@ from ..widgets import Timeline, StreakLine, StreakDay, TitleInput
 ##############################################################################
 class Streaks( Vertical ):
     """Container widget for the streaks."""
+
+    DEFAULT_CSS = """
+    Streaks {
+        overflow-y: scroll;
+        scrollbar-background: $primary-background-darken-1;
+    }
+    """
 
     @property
     def focused_streak( self ) -> StreakLine | None:
@@ -56,8 +63,18 @@ class Main( Screen ):
     """The main screen of the application."""
 
     DEFAULT_CSS = """
+    Main {
+        background: $primary-background-darken-1;
+    }
+
     Timeline {
         height: 3;
+    }
+
+    Timeline#header {
+        dock: top;
+        padding-right: 2;
+        background: $primary-background;
     }
 
     Timeline TimelineTitle, TimelineDay {
@@ -120,8 +137,8 @@ class Main( Screen ):
             ComposeResult: The result of composing the screen.
         """
         yield Header( show_clock=True )
-        self.streaks = Streaks( Timeline( id="header" ) )
-        yield self.streaks
+        self.streaks = Streaks()
+        yield Container( Timeline( id="header" ), self.streaks )
         yield Footer()
 
     def action_focus_left( self ) -> None:
@@ -136,18 +153,14 @@ class Main( Screen ):
         """Action that moves focus up a streak."""
         if ( current := self.streaks.focused_streak ) is not None:
             self.streaks[
-                -1 if current.is_first
-                else self.streaks.index( current ) - 1
+                -1 if current.is_first else self.streaks.index( current ) - 1
             ].steal_focus( current )
 
     def action_focus_down( self ) -> None:
         """Action that moves focus down a streak."""
         if ( current := self.streaks.focused_streak ) is not None:
             self.streaks[
-                # TODO: Note hard-coded value of 1. This needs to change
-                # when I move the header out of the streak list.
-                1 if current.is_last
-                else self.streaks.index( current ) + 1
+                0 if current.is_last else self.streaks.index( current ) + 1
             ].steal_focus( current )
 
     def action_move( self, days: int ) -> None:
