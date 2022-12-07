@@ -2,7 +2,9 @@
 
 ##############################################################################
 # Python imports.
-from typing import cast
+from typing  import cast, Final, Any
+from pathlib import Path
+from json    import dumps, JSONEncoder
 
 ##############################################################################
 # Textual imports.
@@ -12,6 +14,10 @@ from textual.screen     import Screen
 from textual.widgets    import Header, Footer, Input
 from textual.containers import Container, Vertical
 from textual.binding    import Binding
+
+##############################################################################
+# XDG imports.
+from xdg import xdg_data_home
 
 ##############################################################################
 # Local imports.
@@ -27,6 +33,35 @@ class Streaks( Vertical ):
         scrollbar-background: $primary-background-darken-1;
     }
     """
+
+    STREAKS_FILE: Final = Path( "streaks.json" )
+    """Path: The name of the file that the list it saved to."""
+
+    @property
+    def data_file( self ) -> Path:
+        """Path: The full path to the file for saving the data.
+
+        Note:
+            As a side effect of access the directory will be crated if it
+            doesn't exist.
+        """
+        ( save_to := xdg_data_home() / "oidia" ).mkdir( parents=True, exist_ok=True )
+        return save_to / self.STREAKS_FILE
+
+    class Encoder( JSONEncoder ):
+        """Encoder for the streak data data."""
+
+        def default( self, o: object ) -> Any:
+            """Handle unknown values."""
+            return o.as_dict if isinstance( o, StreakLine ) else super().default( o )
+
+    def save( self ) -> None:
+        """Save the streaks to local storage."""
+        self.data_file.write_text( dumps(
+            list( self.query( StreakLine ) ),
+            cls    = self.Encoder,
+            indent = 4
+        ) )
 
     @property
     def focused_streak( self ) -> StreakLine | None:
@@ -57,6 +92,10 @@ class Streaks( Vertical ):
             ValueError: If the streak could not be found.
         """
         return self.children.index( streak )
+
+    def on_streak_line_updated( self ) -> None:
+        """Save the streaks when they get updated in some way."""
+        self.save()
 
 ##############################################################################
 class Main( Screen ):
@@ -183,7 +222,7 @@ class Main( Screen ):
 
     async def action_add( self ) -> None:
         """Add a new timeline to the display."""
-        await self.query_one( Streaks ).mount( input := TitleInput( placeholder="Title", id="streak-add" ) )
+        await self.streaks.mount( input := TitleInput( placeholder="Title", id="streak-add" ) )
         input.focus()
 
     async def on_input_submitted( self, event: Input.Submitted ) -> None:
@@ -203,8 +242,9 @@ class Main( Screen ):
         # If the user entered a title...
         if title:
             # ...add a new timeline associated with it.
-            await self.query_one( Streaks ).mount( line := StreakLine() )
+            await self.streaks.mount( line := StreakLine() )
             line.title = title
             line.query( StreakDay ).last().focus()
+            self.streaks.save()
 
 ### main.py ends here
