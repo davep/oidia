@@ -13,7 +13,7 @@ That's it.
 
 No judgement.
 
-![OIDIA in action](./oidia.png)
+![OIDIA in action](https://raw.githubusercontent.com/davep/oidia/main/oidia.png)
 
 ## Usage
 
