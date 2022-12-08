@@ -164,7 +164,8 @@ class Main( Screen ):
         if title:
             # ...add a new timeline associated with it.
             await self.streaks.mount( line := StreakLine() )
-            line.title = title
+            line.title     = title
+            line.time_span = self.query_one( "#header", Timeline ).time_span
             line.query( StreakDay ).last().focus()
             self.streaks.save()
 
