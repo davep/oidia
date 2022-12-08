@@ -8,6 +8,7 @@
 
 - Dropped the use of <kbd>,</kbd> and <kbd>.</kbd> to shift the timeline,
   now using the arrow keys does the more obvious thing.
+- Improved what happens to focus when the timelines are (un)zoomed.
 
 ### Fixed
 

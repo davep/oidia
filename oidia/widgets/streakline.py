@@ -5,6 +5,7 @@
 from typing      import Any, cast
 from datetime    import date, timedelta
 from collections import defaultdict
+from functools   import partial
 
 ##############################################################################
 # Textual imports.
@@ -247,6 +248,42 @@ class StreakLine( Timeline ):
         """
         super().adjust_day( day, delta )
         cast( StreakDay, day ).done = self._streaks[ day.day ]
+
+    def maybe_focus_day( self, day: date ) -> None:
+        """Set focus on a paticular day, if it's visible.
+
+        Args:
+            day (date): The day to look for and try and focus.
+
+        Note:
+            This will only focus a day display, of the given date, *iff* a
+            day of that date is visible to the user (horizontally).
+        """
+        for candidate in self.query( StreakDay ):
+            if candidate.day == day:
+                candidate.focus()
+                return
+
+    def zoom_days( self, days: int ) -> None:
+        """Zoom the timeline in/out by a given number of days.
+
+        Args:
+            days (int): The number of days to zoom by.
+
+        Note:
+            A negative number of days zooms out.
+        """
+        # If we were currently focused on a date in our timeline, remember
+        # what it is.
+        return_to = focused_day.day if ( focused_day := self.focused_day ) is not None else None
+
+        # Do the normal processing.
+        super().zoom_days( days )
+
+        # Now, if there's a day to return to...
+        if return_to is not None:
+            # ...set things up to settle focus there.
+            self.call_after_refresh( partial( self.maybe_focus_day, return_to ) )
 
     async def action_edit( self ) -> None:
         """Start the process of editing the title of a streak."""
