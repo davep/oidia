@@ -46,6 +46,16 @@ class TimelineDay( Static ):
         """
         return self.day.strftime( "%b %d\n%a" )
 
+    @property
+    def is_first( self ) -> bool:
+        """bool: Is this the first visible day in the display?"""
+        return self.parent is not None and self.parent.children[ 0 ] == self
+
+    @property
+    def is_last( self ) -> bool:
+        """bool: Is this the last visible day in the display?"""
+        return self.parent is not None and self.parent.children[ -1 ] == self
+
 ##############################################################################
 class TimelineTitle( Label ):
     """A widget that displays the title of a timeline."""
