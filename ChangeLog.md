@@ -12,9 +12,8 @@
 
 ### Fixed
 
-- Newly-added streaks were created with the default time span, not the one
-  the user was using at the time.
-  ([#1](https://github.com/davep/oidia/issues/1))
+- Newly-added streaks are now created showing the current timespan, not the
+  default one. ([#1](https://github.com/davep/oidia/issues/1))
 
 ## v0.1.0
 
