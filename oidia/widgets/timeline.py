@@ -158,14 +158,14 @@ class Timeline( Horizontal ):
         except NoMatches:
             pass
 
-    def watch_time_span( self, new_span: timedelta ) -> None:
+    async def watch_time_span( self, new_span: timedelta ) -> None:
         """React to changes to the time span of the timeline.
 
         Args:
             new_span (timedelta): The new timespan for the timeline.
         """
-        self.query( TimelineDay ).remove()
-        self.days.mount( *[
+        await self.query( TimelineDay ).remove()
+        await self.days.mount( *[
             self.make_my_day( self.end_date - timedelta( days=day ) )
             for day in reversed( range( new_span.days ) )
         ] )
