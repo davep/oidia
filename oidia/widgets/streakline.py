@@ -179,6 +179,14 @@ class StreakLine( Timeline ):
         """bool: Does this streak line contain focus?"""
         return bool( self.query( "*:focus-within" ) )
 
+    @property
+    def focused_day( self ) -> StreakDay | None:
+        """StreakDay | None: The `StreakDay` that is focused, or `None` if none are."""
+        try:
+            return self.query_one( "StreakDay:focus", StreakDay )
+        except NoMatches:
+            return None
+
     def steal_focus( self, from_streak: "StreakLine" ) -> None:
         """Steal focus from another streak.
 
