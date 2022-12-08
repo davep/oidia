@@ -4,6 +4,11 @@
 
 **Released: WiP**
 
+### Changed
+
+- Dropped the use of <kbd>,</kbd> and <kbd>.</kbd> to shift the timeline,
+  now using the arrow keys does the more obvious thing.
+
 ### Fixed
 
 - Newly-added streaks were created with the default time span, not the one

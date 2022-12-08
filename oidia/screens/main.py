@@ -75,8 +75,6 @@ class Main( Screen ):
         Binding( "right",                "focus_right", "", show=False ),
         Binding( "up",                   "focus_up",    "", show=False ),
         Binding( "down",                 "focus_down",  "", show=False ),
-        Binding( "comma",                "move(-1)",    "< day" ),
-        Binding( "full_stop",            "move(1)",     "> day" ),
         Binding( "left_square_bracket",  "zoom(-1)",    "Zoom In" ),
         Binding( "right_square_bracket", "zoom(1)",     "Zoom Out" ),
         Binding( "a",                    "add",         "Add Streak" ),
@@ -103,11 +101,17 @@ class Main( Screen ):
 
     def action_focus_left( self ) -> None:
         """Action wrapper for moving focus to the left."""
-        self.focus_previous()
+        if isinstance( self.screen.focused, StreakDay ) and self.screen.focused.is_first:
+            self.action_move( -1 )
+        else:
+            self.focus_previous()
 
     def action_focus_right( self ) -> None:
         """Action wrapper for moving focus to the right."""
-        self.focus_next()
+        if isinstance( self.screen.focused, StreakDay ) and self.screen.focused.is_last:
+            self.action_move( 1 )
+        else:
+            self.focus_next()
 
     def action_focus_up( self ) -> None:
         """Action that moves focus up a streak."""

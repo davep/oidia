@@ -28,8 +28,6 @@ are easily discovered. The main points are:
 - <kbd>Enter</kbd> edits the title of a streak
 - <kbd>Space</kbd> or <kbd>=</kbd> increase the count for a day
 - <kbd>Backspace</kbd> or <kbd>-</kbd> decrease the count for a day
-- <kbd>,</kbd> shifts the timeline back in time
-- <kbd>.</kbd> shifts the timeline forward in time
 - <kbd>[</kbd> zooms the timeline in
 - <kbd>]</kbd> zooms the timeline out
 
