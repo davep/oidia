@@ -81,7 +81,7 @@ class TimelineDays( Grid ):
     """str: The default styling for a `TimelineDays`."""
 
     def __init__( self, span: timedelta, *args: Any, **kwargs: Any ) -> None:
-        """initialise the days widget.
+        """Initialise the days widget.
 
         Args:
             span (timedelta): The span of time to cover.
