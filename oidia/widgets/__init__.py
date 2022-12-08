@@ -5,6 +5,7 @@
 from .timeline    import TimelineTitle, TimelineDay, Timeline
 from .streakline  import StreakDay, StreakLine
 from .title_input import TitleInput
+from .streaks     import Streaks
 
 ##############################################################################
 # Exports.
@@ -14,7 +15,8 @@ __all__ = [
     "Timeline",
     "StreakDay",
     "StreakLine",
-    "TitleInput"
+    "TitleInput",
+    "Streaks"
 ]
 
 ### __init__.py ends here
