@@ -55,6 +55,10 @@ class Main( Screen ):
         text-style: bold;
     }
 
+    StreakDay {
+        transition: background 175ms linear;
+    }
+
     StreakDay.done {
         background: green;
     }
