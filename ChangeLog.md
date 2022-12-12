@@ -1,5 +1,14 @@
 # OIDIA ChangeLog
 
+## v0.2.1
+
+**Released: 2022-12-12**
+
+### Fixed
+
+- Pinned to Textual 0.5.0 until
+  https://github.com/Textualize/textual/issues/1343 is resolved.
+
 ## v0.2.0
 
 **Released: 2022-12-08**
