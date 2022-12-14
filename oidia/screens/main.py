@@ -71,10 +71,10 @@ class Main( Screen ):
     """str: The styles for the main screen."""
 
     BINDINGS = [
-        Binding( "left",                 "focus_left",  "", show=False ),
-        Binding( "right",                "focus_right", "", show=False ),
-        Binding( "up",                   "focus_up",    "", show=False ),
-        Binding( "down",                 "focus_down",  "", show=False ),
+        Binding( "left",                 "focus_left",  "", show=False, universal=True ),
+        Binding( "right",                "focus_right", "", show=False, universal=True ),
+        Binding( "up",                   "focus_up",    "", show=False, universal=True ),
+        Binding( "down",                 "focus_down",  "", show=False, universal=True ),
         Binding( "left_square_bracket",  "zoom(-1)",    "Zoom In" ),
         Binding( "right_square_bracket", "zoom(1)",     "Zoom Out" ),
         Binding( "a",                    "add",         "Add Streak", key_display="a" ),
