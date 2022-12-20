@@ -1,4 +1,4 @@
-"""Setup file for the gridinfo application."""
+"""Setup file for OIDIA."""
 
 ##############################################################################
 # Python imports.
