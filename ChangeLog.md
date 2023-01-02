@@ -1,5 +1,13 @@
 # OIDIA ChangeLog
 
+## v0.3.0
+
+**Released: 2022-12-31**
+
+### Changed
+
+- Updated to Textual 0.9.1.
+
 ## v0.2.1
 
 **Released: 2022-12-12**
