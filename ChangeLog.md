@@ -2,7 +2,7 @@
 
 ## v0.3.0
 
-**Released: 2022-12-31**
+**Released: 2023-01-02**
 
 ### Changed
 
