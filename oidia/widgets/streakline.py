@@ -203,7 +203,7 @@ class StreakLine( Timeline ):
             return
 
         # This is more to keep the type checkers happy really, but on the
-        # office chance we have landed here with a parent missing, let's not
+        # off chance we have landed here with a parent missing, let's not
         # bother doing anything else.
         if from_streak.parent is None or self.parent is None:
             return
