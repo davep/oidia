@@ -165,11 +165,11 @@ class Timeline( Horizontal ):
             new_span (timedelta): The new timespan for the timeline.
         """
         await self.query( TimelineDay ).remove()
+        self.days.spanning( self.time_span )
         await self.days.mount( *[
             self.make_my_day( self.end_date - timedelta( days=day ) )
             for day in reversed( range( new_span.days ) )
         ] )
-        self.days.spanning( self.time_span )
 
     def adjust_day( self, day: TimelineDay, delta: timedelta ) -> None:
         """Adjust the date of a given timeline day.
