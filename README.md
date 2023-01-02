@@ -37,7 +37,7 @@ are easily discovered. The main points are:
 
 ## Licence
 
-OIDIA - A simple judgement-free terminal-based streak tracker
+OIDIA - A simple judgement-free terminal-based streak tracker  
 Copyright (C) 2022-2023 Dave Pearson
 
 This program is free software: you can redistribute it and/or modify it
