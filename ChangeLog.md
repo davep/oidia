@@ -1,5 +1,14 @@
 # OIDIA ChangeLog
 
+## v0.4.0
+
+**Released: WiP**
+
+### Changed
+
+- Updated the way the cursor keys are used to move around the display,
+  leaning more on the more recent updates to bindings in Textual.
+
 ## v0.3.0
 
 **Released: 2023-01-02**

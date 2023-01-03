@@ -34,6 +34,10 @@ class StreakDay( TimelineDay, can_focus=True ):
     """str: The default styling for a streak day."""
 
     BINDINGS = [
+        Binding( "left",              "screen.focus_left",  "", show=False ),
+        Binding( "right",             "screen.focus_right", "", show=False ),
+        Binding( "up",                "screen.focus_up",    "", show=False ),
+        Binding( "down",              "screen.focus_down",  "", show=False ),
         Binding( "minus,backspace",   "done( -1 )", "Less Done", key_display="-" ),
         Binding( "equals_sign,space", "done(  1 )", "More Done", key_display="=" )
     ]
