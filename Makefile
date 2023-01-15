@@ -9,7 +9,7 @@ twine  := $(run) twine
 vermin := $(run) vermin -v --no-parse-comments --backport dataclasses --backport typing --eval-annotations
 
 ##############################################################################
-# Run the plotter.
+# Run the app.
 .PHONY: run
 run:
 	$(python) -m $(app)
