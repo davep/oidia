@@ -2,7 +2,7 @@
 
 ## v0.4.0
 
-**Released: WiP**
+**Released: 2023-02-09**
 
 ### Changed
 
