@@ -1,5 +1,13 @@
 # OIDIA ChangeLog
 
+## v0.5.0
+
+**Released: 2023-02-17**
+
+### Changed
+
+- Updated to Textual 0.11.1.
+
 ## v0.4.0
 
 **Released: 2023-02-09**
