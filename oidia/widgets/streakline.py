@@ -49,7 +49,8 @@ class StreakDay( TimelineDay, can_focus=True ):
     def __init__( self, day: date, done: int, *args: Any, **kwargs: Any ) -> None:
         """Initialise the streak day."""
         super().__init__( day, *args, **kwargs )
-        self.done = done
+        with self.prevent( self.Updated ):
+            self.done = done
 
     def render( self ) -> RenderResult:
         """Render the content of the streak day.
