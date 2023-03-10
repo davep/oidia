@@ -67,15 +67,15 @@ class StreakDay( TimelineDay, can_focus=True ):
             done (int): The done count for the day.
         """
 
-        def __init__( self, sender: "StreakDay", updated_to: int ) -> None:
+        def __init__( self, day: "StreakDay", updated_to: int ) -> None:
             """Initialise the message.
 
             Args:
-                sender (StreakDay): The streak day widget sending the message.
+                day (StreakDay): The streak day widget being updated.
                 updated_to (int): The number the done count is being updated to.
             """
-            super().__init__( sender )
-            self.day  = sender.day
+            super().__init__()
+            self.day  = day.day
             self.done = updated_to
 
     def on_mount( self ) -> None:
@@ -89,7 +89,7 @@ class StreakDay( TimelineDay, can_focus=True ):
             new_done (int): The new value for `done`.
         """
         self.set_class( bool( new_done ), "done" )
-        self.post_message_no_wait( self.Updated( self, new_done ) )
+        self.post_message( self.Updated( self, new_done ) )
 
     def action_done( self, this_many: int ) -> None:
         """Handle the done count being changed.
@@ -241,7 +241,7 @@ class StreakLine( Timeline ):
         self._streaks[ event.day ] = event.done
         if self._streaks[ event.day ] == 0:
             del self._streaks[ event.day ]
-        self.post_message_no_wait( self.Updated( self ) )
+        self.post_message( self.Updated() )
 
     def adjust_day( self, day: TimelineDay, delta: timedelta ) -> None:
         """Adjust the date of a given timeline day.
@@ -342,7 +342,7 @@ class StreakLine( Timeline ):
         self.remove_class( "editing" )
 
         # Let anyone above us know we changed stuff.
-        self.post_message_no_wait( self.Updated( self ) )
+        self.post_message( self.Updated() )
 
     async def on_click( self, event: Click ) -> None:
         """Handle clicks on the widget.
@@ -355,10 +355,10 @@ class StreakLine( Timeline ):
             event.prevent_default()
             await self.action_edit()
 
-    async def action_delete( self ) -> None:
+    def action_delete( self ) -> None:
         """Delete the current streak."""
-        await self.post_message( self.Updated( self ) )
-        await self.remove()
+        self.post_message( self.Updated() )
+        self.remove()
 
     def action_up( self ) -> None:
         """Move the streak up the list of streaks."""
@@ -367,7 +367,7 @@ class StreakLine( Timeline ):
             parent.move_child(
                 self, before=parent.children.index( self ) - 1
             )
-            self.post_message_no_wait( self.Updated( self ) )
+            self.post_message( self.Updated() )
             self.scroll_visible()
 
     def action_down( self ) -> None:
@@ -377,7 +377,7 @@ class StreakLine( Timeline ):
             parent.move_child(
                 self, after=parent.children.index( self ) + 1
             )
-            self.post_message_no_wait( self.Updated( self ) )
+            self.post_message( self.Updated() )
             self.scroll_visible()
 
 ### streakline.py ends here
