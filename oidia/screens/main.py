@@ -85,8 +85,10 @@ class Main( Screen ):
             The result of composing the screen.
         """
         yield Header( show_clock=True )
-        self.streaks = Streaks()
-        yield Container( Timeline( id="header" ), self.streaks )
+        with Container():
+            yield Timeline( id="header" )
+            with Streaks() as streaks:
+                self.streaks = streaks
         yield Footer()
 
     async def on_mount( self ) -> None:
