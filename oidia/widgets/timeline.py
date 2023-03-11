@@ -24,16 +24,16 @@ class TimelineDay( Static ):
         text-align: center;
     }
     """
-    """str: The default styling for a `TimelineDay`."""
+    """The default styling for a `TimelineDay`."""
 
     day = reactive( date.today() )
-    """date: The date of this day."""
+    """The date of this day."""
 
     def __init__( self, day: date ) -> None:
         """Initialise the day widget.
 
         Args:
-            day (date): The day to represent.
+            day: The day to represent.
         """
         super().__init__()
         self.day = day
@@ -42,18 +42,18 @@ class TimelineDay( Static ):
         """Render this day.
 
         Returns:
-            RederResult: The rendering of this day.
+            The rendering of this day.
         """
         return self.day.strftime( "%b %d\n%a" )
 
     @property
     def is_first( self ) -> bool:
-        """bool: Is this the first visible day in the display?"""
+        """Is this the first visible day in the display?"""
         return self.parent is not None and self.parent.children[ 0 ] == self
 
     @property
     def is_last( self ) -> bool:
-        """bool: Is this the last visible day in the display?"""
+        """Is this the last visible day in the display?"""
         return self.parent is not None and self.parent.children[ -1 ] == self
 
 ##############################################################################
@@ -66,7 +66,7 @@ class TimelineTitle( Label ):
         height: 100%;
     }
     """
-    """str: The default styling for a `TimelineTitle`."""
+    """The default styling for a `TimelineTitle`."""
 
 ##############################################################################
 class TimelineDays( Grid ):
@@ -78,13 +78,15 @@ class TimelineDays( Grid ):
         grid-size: 1;
     }
     """
-    """str: The default styling for a `TimelineDays`."""
+    """The default styling for a `TimelineDays`."""
 
     def __init__( self, span: timedelta, *args: Any, **kwargs: Any ) -> None:
         """Initialise the days widget.
 
         Args:
-            span (timedelta): The span of time to cover.
+            span: The span of time to cover.
+            *args: The remaining positional arguments for the widget.
+            **kwargs: The remaining keyword arguments for the widget.
         """
         super().__init__( *args, **kwargs )
         self.spanning( span )
@@ -93,7 +95,7 @@ class TimelineDays( Grid ):
         """Set the span for the days display.
 
         Args:
-            span (timedelta): The span.
+            span: The span.
         """
         self.styles.grid_size_columns = span.days
 
@@ -102,32 +104,32 @@ class Timeline( Horizontal ):
     """Widget to display a horizontal timeline."""
 
     title = reactive( "", init=False )
-    """str: The title to five the timeline."""
+    """The title to five the timeline."""
 
     time_span = reactive( timedelta( weeks=1 ), init=False )
-    """timedelta: The span of time the timeline will show in one go."""
+    """The span of time the timeline will show in one go."""
 
     end_date = reactive( date.today() )
-    """date: The last date shown in the timeline."""
+    """The last date shown in the timeline."""
 
     @property
     def start_date( self ) -> date:
-        """date: The first date shown in the timeline."""
+        """The first date shown in the timeline."""
         return self.end_date - self.time_span
 
     @property
     def dates( self ) -> list[ date ]:
-        """list[ date ]: The list of dates currently in the window of interest."""
+        """The list of dates currently in the window of interest."""
         return [ self.start_date + timedelta( days=day ) for day in range( 1, self.time_span.days + 1 ) ]
 
     def make_my_day( self, day: date ) -> TimelineDay:
         """Make a day widget for the given day.
 
         Args:
-            day (date): The date to make the day widget for.
+            day: The date to make the day widget for.
 
         Returns:
-            TimelineDay: The day widget for the timeline.
+            The day widget for the timeline.
         """
         return TimelineDay( day )
 
@@ -135,7 +137,7 @@ class Timeline( Horizontal ):
         """Compose the widget.
 
         Returns:
-            ComposeResult: The result of composing the widget.
+            The result of composing the widget.
         """
         yield TimelineTitle( self.title )
         self.days = TimelineDays( self.time_span, *[
@@ -151,7 +153,7 @@ class Timeline( Horizontal ):
         """Update the title when a new one is set.
 
         Args:
-            new_title (str): The new title.
+            new_title: The new title.
         """
         try:
             self.query_one( TimelineTitle ).update( new_title )
@@ -162,7 +164,7 @@ class Timeline( Horizontal ):
         """React to changes to the time span of the timeline.
 
         Args:
-            new_span (timedelta): The new timespan for the timeline.
+            new_span: The new timespan for the timeline.
         """
         with self.app.batch_update():
             await self.query( TimelineDay ).remove()
@@ -176,8 +178,8 @@ class Timeline( Horizontal ):
         """Adjust the date of a given timeline day.
 
         Args:
-            day (TimelineDay): The day widget to adjust.
-            delta (timedelta): The period of time to adjust by.
+            day: The day widget to adjust.
+            delta: The period of time to adjust by.
         """
         day.day += delta
 
@@ -185,8 +187,8 @@ class Timeline( Horizontal ):
         """React to changes to the end date for the display.
 
         Args:
-            old_date (date): The old value for the end date.
-            new_date (date): The new value for the end date.
+            old_date: The old value for the end date.
+            new_date: The new value for the end date.
         """
         diff = new_date - old_date
         for day in self.query( TimelineDay ):
@@ -196,7 +198,7 @@ class Timeline( Horizontal ):
         """Move the timeline by a given number of days.
 
         Args:
-            days (int): The number of days to move by.
+            days: The number of days to move by.
         """
         self.end_date += timedelta( days=days )
 
@@ -204,7 +206,7 @@ class Timeline( Horizontal ):
         """Zoom the timeline in/out by a given number of days.
 
         Args:
-            days (int): The number of days to zoom by.
+            days: The number of days to zoom by.
 
         Note:
             A negative number of days zooms out.

@@ -31,11 +31,11 @@ class Streaks( Vertical ):
     """
 
     STREAKS_FILE: Final = Path( "streaks.json" )
-    """Path: The name of the file that the list it saved to."""
+    """The name of the file that the list it saved to."""
 
     @property
     def data_file( self ) -> Path:
-        """Path: The full path to the file for saving the data.
+        """The full path to the file for saving the data.
 
         Note:
             As a side effect of access the directory will be crated if it
@@ -48,7 +48,11 @@ class Streaks( Vertical ):
         """Encoder for the streak data data."""
 
         def default( self, o: object ) -> Any:
-            """Handle unknown values."""
+            """Handle unknown values.
+
+            Args:
+                o: The object to handle.
+            """
             return o.as_dict if isinstance( o, StreakLine ) else super().default( o )
 
     def save( self ) -> None:
@@ -69,7 +73,7 @@ class Streaks( Vertical ):
 
     @property
     def focused_streak( self ) -> StreakLine | None:
-        """StreakLine | None: The streak that contains focus, if there is one."""
+        """The streak that contains focus, if there is one."""
         try:
             return self.query_one( "StreakLine:focus-within", StreakLine )
         except NoMatches:
@@ -79,7 +83,7 @@ class Streaks( Vertical ):
         """Get a streak based on its index.
 
         Args:
-            index (int): The index of the streak to get.
+            index: The index of the streak to get.
         """
         return cast( StreakLine, self.children[ index ] )
 
@@ -87,10 +91,10 @@ class Streaks( Vertical ):
         """Find the index of the given streak.
 
         Args:
-            streak (StreakLine): The streak to look for.
+            streak: The streak to look for.
 
         Returns:
-            int: The position of the streak.
+            The position of the streak.
 
         Raises:
             ValueError: If the streak could not be found.

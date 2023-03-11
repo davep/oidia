@@ -14,15 +14,15 @@ class OIDIA( App[ None ] ):
     """The main app class."""
 
     TITLE = "OIDIA"
-    """str: The title of the application."""
+    """The title of the application."""
 
     SUB_TITLE = f"The simple terminal streak tracker - v{__version__}"
-    """str: The subtitle of the application."""
+    """The subtitle of the application."""
 
     SCREENS = {
         "main": Main
     }
-    """dict[ str, Screen ]: The screens for the application."""
+    """The screens for the application."""
 
     def on_mount( self ) -> None:
         """Initialise the application on startup."""

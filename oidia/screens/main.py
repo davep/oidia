@@ -68,7 +68,7 @@ class Main( Screen ):
         background: lightgreen;
     }
     """
-    """str: The styles for the main screen."""
+    """The styles for the main screen."""
 
     BINDINGS = [
         Binding( "left_square_bracket",  "zoom(-1)",    "Zoom In" ),
@@ -76,13 +76,13 @@ class Main( Screen ):
         Binding( "a",                    "add",         "Add Streak", key_display="a" ),
         Binding( "escape",               "app.quit",    "Quit" )
     ]
-    """list[ Binding ]: The bindings for the main screen."""
+    """The bindings for the main screen."""
 
     def compose( self ) -> ComposeResult:
         """Compose the content of the main screen.
 
-        Args:
-            ComposeResult: The result of composing the screen.
+        Returns:
+            The result of composing the screen.
         """
         yield Header( show_clock=True )
         self.streaks = Streaks()
@@ -127,7 +127,7 @@ class Main( Screen ):
         """Move the timeline.
 
         Args:
-            days (int): The number of times to move the timeline by.
+            days: The number of times to move the timeline by.
         """
         for timeline in self.query( Timeline ):
             timeline.move_days( days )
@@ -136,7 +136,7 @@ class Main( Screen ):
         """Zoom the timeline.
 
         Args:
-            days (int): The number of times to zoom the timeline by.
+            days: The number of times to zoom the timeline by.
         """
         for timeline in self.query( Timeline ):
             timeline.zoom_days( days )
@@ -150,7 +150,7 @@ class Main( Screen ):
         """Handle the user submitting input.
 
         Args:
-            event (TitleInput.Submitted): The submit event.
+            event: The submit event.
         """
 
         # We're going to remove the input, so let's get its content before

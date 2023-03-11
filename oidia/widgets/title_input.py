@@ -16,12 +16,12 @@ class TitleInput( Input ):
         width: 25;
     }
     """
-    """str: The styles for the title input widget."""
+    """The styles for the title input widget."""
 
     BINDINGS = [
         Binding( "escape", "cancel", "Cancel" )
     ]
-    """list[ Binding ]: The bindings for the title input widget."""
+    """The bindings for the title input widget."""
 
     async def action_cancel( self ) -> None:
         """Provide a cancel action.

@@ -31,7 +31,7 @@ class StreakDay( TimelineDay, can_focus=True ):
         content-align: center middle;
     }
     """
-    """str: The default styling for a streak day."""
+    """The default styling for a streak day."""
 
     BINDINGS = [
         Binding( "left",              "screen.focus_left",  "", show=False ),
@@ -41,13 +41,20 @@ class StreakDay( TimelineDay, can_focus=True ):
         Binding( "minus,backspace",   "done( -1 )", "Less Done", key_display="-" ),
         Binding( "equals_sign,space", "done(  1 )", "More Done", key_display="=" )
     ]
-    """list[ Binding ]: The bindings for a streak day."""
+    """The bindings for a streak day."""
 
     done = reactive( 0 )
-    """int: The done count for the day."""
+    """The done count for the day."""
 
     def __init__( self, day: date, done: int, *args: Any, **kwargs: Any ) -> None:
-        """Initialise the streak day."""
+        """Initialise the streak day.
+
+        Args:
+            day: The date for this day in the streak line.
+            done: How many times the streak has been done on this day.
+            *args: Remaining positional arguments.
+            **kwargs: Remaining keyword arguments.
+        """
         super().__init__( day, *args, **kwargs )
         with self.prevent( self.Updated ):
             self.done = done
@@ -56,28 +63,25 @@ class StreakDay( TimelineDay, can_focus=True ):
         """Render the content of the streak day.
 
         Returns:
-            RenderResult: The content to render for the day.
+            The content to render for the day.
         """
         return str( self.done ) if self.done else ""
 
     class Updated( Message ):
-        """Message sent when the streak day is updated.
-
-        Attributes:
-            day (date): The day on the timeline.
-            done (int): The done count for the day.
-        """
+        """Message sent when the streak day is updated."""
 
         def __init__( self, day: "StreakDay", updated_to: int ) -> None:
             """Initialise the message.
 
             Args:
-                day (StreakDay): The streak day widget being updated.
-                updated_to (int): The number the done count is being updated to.
+                day: The streak day widget being updated.
+                updated_to: The number the done count is being updated to.
             """
             super().__init__()
             self.day  = day.day
+            """The day on the timeline."""
             self.done = updated_to
+            """The done count for the day."""
 
     def on_mount( self ) -> None:
         """Force an initial refresh on mount."""
@@ -87,7 +91,7 @@ class StreakDay( TimelineDay, can_focus=True ):
         """React to changes in the done count.
 
         Args:
-            new_done (int): The new value for `done`.
+            new_done: The new value for `done`.
         """
         self.set_class( bool( new_done ), "done" )
         self.post_message( self.Updated( self, new_done ) )
@@ -96,7 +100,7 @@ class StreakDay( TimelineDay, can_focus=True ):
         """Handle the done count being changed.
 
         Args:
-            this_many (int): The amount to change the done count by.
+            this_many: The amount to change the done count by.
         """
         self.done = max( 0, self.done + this_many )
 
@@ -104,7 +108,7 @@ class StreakDay( TimelineDay, can_focus=True ):
         """Handle a mouse click event.
 
         Args:
-            event (Click): The click event.
+            event: The click event.
 
         Note:
             Implements the ability to increase or decrease the done count
@@ -133,17 +137,23 @@ class StreakLine( Timeline ):
         Binding( "ctrl+up",   "up",     "Up" ),
         Binding( "ctrl+down", "down",   "Down" )
     ]
-    """list[ Binding ]: The bindings for the widget."""
+    """The bindings for the widget."""
 
     def __init__( self, *args: Any, start: dict[ date, int ] | None=None, **kwargs: Any ) -> None:
-        """Initialise the streak line."""
+        """Initialise the streak line.
+
+        Args:
+            *args: The positional arguments for the widget.
+            start: The initial state for the line.
+            **kwargs: The remaining keyword arguments for the widget.
+        """
         super().__init__( *args, **kwargs )
         self._streaks: defaultdict[ date, int ] = defaultdict( int, start or {} )
         self._removing = False
 
     @property
     def as_dict( self ) -> dict[ str, str | dict[ str, int ] ]:
-        """dict[ str, str | dict[ str, int ] ]: The streak as a dictionary.
+        """The streak as a dictionary.
 
         This is intended to be converted into JSON data.
         """
@@ -159,10 +169,10 @@ class StreakLine( Timeline ):
         """Create a fresh instance of a `StreakLine` from a dictionary.
 
         Args:
-            data ([ str, str | dict[ str, int ] ]): The data to load up.
+            data: The data to load up.
 
         Returns:
-            StreakLine: The new widget to show the streak.
+            The new widget to show the streak.
         """
         streak = cls( start={
             date.fromisoformat( day ): count for day, count
@@ -178,22 +188,22 @@ class StreakLine( Timeline ):
 
     @property
     def is_first( self ) -> bool:
-        """bool: Is this the first streak in the list?"""
+        """Is this the first streak in the list?"""
         return self.parent is not None and self.parent.children[ 0 ] == self
 
     @property
     def is_last( self ) -> bool:
-        """bool: Is this the last streak in the list?"""
+        """Is this the last streak in the list?"""
         return self.parent is not None and self.parent.children[ -1 ] == self
 
     @property
     def contains_focus( self ) -> bool:
-        """bool: Does this streak line contain focus?"""
+        """Does this streak line contain focus?"""
         return bool( self.query( "*:focus-within" ) )
 
     @property
     def focused_day( self ) -> StreakDay | None:
-        """StreakDay | None: The `StreakDay` that is focused, or `None` if none are."""
+        """The `StreakDay` that is focused, or `None` if none are."""
         try:
             return self.query_one( "StreakDay:focus", StreakDay )
         except NoMatches:
@@ -203,7 +213,7 @@ class StreakLine( Timeline ):
         """Steal focus from another streak.
 
         Args:
-            from_streak (StreakLine): The streak to steal from.
+            from_streak: The streak to steal from.
         """
 
         # There's no point in doing anything if the other streak line
@@ -229,10 +239,10 @@ class StreakLine( Timeline ):
         """Make a day widget for the given day.
 
         Args:
-            day (date): The date to make the day widget for.
+            day: The date to make the day widget for.
 
         Returns:
-            StreakDay: The day widget for the timeline.
+            The day widget for the timeline.
         """
         return StreakDay( day, self._streaks[ day ] )
 
@@ -243,7 +253,7 @@ class StreakLine( Timeline ):
         """React to the done count of a day being changed.
 
         Args:
-            event (StreakDay.Updated): The event.
+            event: The event.
         """
         self._streaks[ event.day ] = event.done
         if self._streaks[ event.day ] == 0:
@@ -254,8 +264,8 @@ class StreakLine( Timeline ):
         """Adjust the date of a given timeline day.
 
         Args:
-            day (TimelineDay): The day widget to adjust.
-            delta (timedelta): The period of time to adjust by.
+            day: The day widget to adjust.
+            delta: The period of time to adjust by.
         """
         super().adjust_day( day, delta )
         cast( StreakDay, day ).done = self._streaks[ day.day ]
@@ -264,7 +274,7 @@ class StreakLine( Timeline ):
         """Set focus on a paticular day, if it's visible.
 
         Args:
-            day (date): The day to look for and try and focus.
+            day: The day to look for and try and focus.
 
         Note:
             This will only focus a day display, of the given date, *iff* a
@@ -279,7 +289,7 @@ class StreakLine( Timeline ):
         """Zoom the timeline in/out by a given number of days.
 
         Args:
-            days (int): The number of days to zoom by.
+            days: The number of days to zoom by.
 
         Note:
             A negative number of days zooms out.
@@ -318,7 +328,7 @@ class StreakLine( Timeline ):
         """Handle the user submitting input.
 
         Args:
-            event (TitleInput.Submitted): The submit event.
+            event: The submit event.
         """
 
         # We don't want this event bubbling up the DOM. If we got this it's
@@ -355,7 +365,7 @@ class StreakLine( Timeline ):
         """Handle clicks on the widget.
 
         Args:
-            event (Click): The click event.
+            event: The click event.
         """
         target, _ = self.screen.get_widget_at( event.screen_x, event.screen_y )
         if isinstance( target, TimelineTitle ) and isinstance( target.parent, StreakLine ) and event.shift:
