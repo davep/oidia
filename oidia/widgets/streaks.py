@@ -54,7 +54,7 @@ class Streaks( Vertical ):
     def save( self ) -> None:
         """Save the streaks to local storage."""
         self.data_file.write_text( dumps(
-            list( self.query( StreakLine ) ),
+            [ streak for streak in self.query( StreakLine ) if not streak.removing ],
             cls    = self.Encoder,
             indent = 4
         ) )

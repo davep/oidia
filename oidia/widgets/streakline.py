@@ -139,6 +139,7 @@ class StreakLine( Timeline ):
         """Initialise the streak line."""
         super().__init__( *args, **kwargs )
         self._streaks: defaultdict[ date, int ] = defaultdict( int, start or {} )
+        self._removing = False
 
     @property
     def as_dict( self ) -> dict[ str, str | dict[ str, int ] ]:
@@ -169,6 +170,11 @@ class StreakLine( Timeline ):
         } )
         streak.title = str( data[ "title" ] )
         return streak
+
+    @property
+    def removing( self ) -> bool:
+        """Is this line in the process of being removed?"""
+        return self._removing
 
     @property
     def is_first( self ) -> bool:
@@ -358,8 +364,18 @@ class StreakLine( Timeline ):
 
     def action_delete( self ) -> None:
         """Delete the current streak."""
+        # Mark this line as one being removed.
+        self._removing = True
+        # Let the parent know a change is happening, it should respect the
+        # `removing` state of lines when saving (in other words filter them
+        # out).
         self.post_message( self.Updated() )
-        self.remove()
+        # Finally, we want to self-remove, but doing so would cause the
+        # above message to never make it to the parent; so we delay the
+        # removal until (hopefully) the message has got out.
+        #
+        # See https://github.com/Textualize/textual/issues/2017
+        self.call_after_refresh( self.remove )
 
     def action_up( self ) -> None:
         """Move the streak up the list of streaks."""
