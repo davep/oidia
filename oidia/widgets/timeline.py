@@ -169,7 +169,7 @@ class Timeline( Horizontal ):
         with self.app.batch_update():
             await self.query( TimelineDay ).remove()
             self.days.spanning( self.time_span )
-            await self.days.mount( *[
+            await self.days.mount_all( [
                 self.make_my_day( self.end_date - timedelta( days=day ) )
                 for day in reversed( range( new_span.days ) )
             ] )

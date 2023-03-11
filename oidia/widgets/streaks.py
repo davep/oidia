@@ -66,7 +66,7 @@ class Streaks( Vertical ):
     async def load( self ) -> None:
         """Load any streak data from storage."""
         if self.data_file.exists():
-            await self.mount( *[
+            await self.mount_all( [
                 StreakLine.from_dict( streak )
                 for streak in loads( self.data_file.read_text() )
             ] )
