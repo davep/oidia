@@ -47,7 +47,7 @@ setup(
     packages                      = find_packages(),
     package_data                  = { "oidia": [ "py.typed" ] },
     include_package_data          = True,
-    install_requires              = [ "textual==0.11.1", "xdg" ],
+    install_requires              = [ "textual==0.14.0", "xdg" ],
     python_requires               = ">=3.10",
     keywords                      = "terminal textual streak todo",
     entry_points                  = {
